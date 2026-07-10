@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vlm326 — Contacts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Vlm326</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="contacts.html">Contacts</a></li>
+                </ul>
+                <button id="themeToggle" type="button">
+                    <span id="themeIcon">☀️</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Contacts</h5>
+                        <p class="card-text">Feel free to reach out to me through the following channels:</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex align-items-center gap-2">
+                                <span class="text-danger" style="font-size: 1.2rem;">•</span> Email:
+                                <a href="mailto:morozvv75@gmail.com">morozvv75@gmail.com</a>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center gap-2">
+                                <span class="text-danger" style="font-size: 1.2rem;">•</span> Telegram:
+                                <a href="https://t.me/Vlm326" target="_blank">@Vlm326</a>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center gap-2">
+                                <span class="text-danger" style="font-size: 1.2rem;">•</span> GitHub:
+                                <a href="https://github.com/vlm326" target="_blank">vlm326</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <p class="mb-0">&copy; 2026 Vlm326</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function () {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const saved = localStorage.getItem('theme');
+            if (saved) html.setAttribute('data-bs-theme', saved);
+            updateIcon();
+            document.getElementById('themeToggle').addEventListener('click', function () {
+                const next = html.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-bs-theme', next);
+                localStorage.setItem('theme', next);
+                updateIcon();
+            });
+            function updateIcon() {
+                icon.textContent = html.getAttribute('data-bs-theme') === 'dark' ? '☀️' : '🌙';
+            }
+        })();
+    </script>
+</body>
+
+</html>
