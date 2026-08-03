@@ -112,6 +112,19 @@ input {
     animation: scan 8s linear infinite
 }
 
+.crt-shell__noise::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -8vh;
+    height: 2px;
+    background: rgba(160, 255, 190, .38);
+    box-shadow: 0 0 8px rgba(0, 255, 102, .65), 0 0 22px rgba(0, 255, 102, .3);
+    opacity: .55;
+    animation: refresh-line 11s linear infinite
+}
+
 .screen {
     position: relative;
     max-width: 1480px;
@@ -613,6 +626,13 @@ progress::-webkit-progress-value {
     to {
         width: 100%
     }
+}
+
+@keyframes refresh-line {
+    0% { transform: translateY(0); opacity: 0; }
+    5% { opacity: .55; }
+    88% { opacity: .55; }
+    100% { transform: translateY(116vh); opacity: 0; }
 }
 
 @keyframes blink {
