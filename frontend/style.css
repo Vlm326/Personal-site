@@ -1,0 +1,21 @@
+html { min-height: 100vh; }
+body { min-height: 100vh; display: flex; flex-direction: column; }
+[data-bs-theme="dark"] body { background-color: #0d1117 !important; }
+footer { margin-top: auto; flex-shrink: 0; }
+main { flex: 1 0 auto; padding-bottom: 1rem; }
+.navbar { background-color: #020409 !important; }
+.navbar-brand { color: #ffffff !important; }
+[data-bs-theme="light"] .navbar-brand { color: #212529 !important; }
+[data-bs-theme="light"] .navbar { background-color: #f8f9fa !important; }
+.card-body hr { margin: 1.5rem 0; }
+.card { transition: transform 0.5s ease, box-shadow 0.5s ease; }
+.card:hover { transform: scale(1.02); box-shadow: 0 0 3px #ff69b4, 0 0 5px #ff69b4, 0 0 8px #ff69b4, 0 0 11px #ff65b7; }
+.nav-item a { color: #ffffff; transition: color 0.3s ease; }
+[data-bs-theme="light"] .nav-item a { color: #212529; }
+.nav-item a:hover { color: #61dafb; transform: scale(1.02); }
+.avatar { max-width: 350px; border-radius: 50%; transition: transform 0.5s ease, box-shadow 0.5s ease; overflow: hidden; }
+.avatar:hover { transform: scale(1.02); box-shadow: 0 0 3px #ff69b4, 0 0 5px #ff69b4, 0 0 8px #ff69b4, 0 0 11px #ff65b7; }
+.col-md-4 { max-width: 350px; }
+.list-group-item { border-left: none; border-right: none; }
+#themeToggle { border: none; font-size: 1.3rem; line-height: 1; background: transparent; padding: 0.25rem 0.5rem; color: #ffffff; }
+[data-bs-theme="light"] #themeToggle { color: #212529; }

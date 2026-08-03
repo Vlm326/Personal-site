@@ -1,0 +1,10 @@
+[github]
+username = "Vlm326"
+# Создать токен: https://github.com/settings/tokens
+# Fine-grained token, read-only доступ к публичным репозиториям
+token = "github_pat_..."
+user_agent = "my-personal-site"
+
+[server]
+host = "0.0.0.0"
+port = 3000

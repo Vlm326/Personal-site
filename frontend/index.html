@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#020402">
+    <title>VLM326 // PORTFOLIO TERMINAL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="terminal.css">
+</head>
+
+<body>
+    <div class="boot" id="boot" aria-label="System boot sequence">
+        <div class="boot__logo">VLM326</div>
+        <div class="boot__line" id="bootLine">INITIALIZING DISPLAY...</div>
+        <div class="boot__bar"><span></span></div>
+    </div>
+
+    <main class="crt-shell" id="top">
+        <div class="crt-shell__glass" aria-hidden="true"></div>
+        <div class="crt-shell__noise" aria-hidden="true"></div>
+        <div class="screen">
+            <header class="topbar terminal-box">
+                <div class="topbar__meta">
+                    <span>VLM326 WORKSTATION</span>
+                    <span>TTY0 // SECURE LINK</span>
+                </div>
+                <div class="topbar__brand" aria-label="VLM326 portfolio">VLM326</div>
+                <div class="topbar__status"><i class="status-dot"></i> ONLINE <span class="hide-small">//</span> <span
+                        id="clock">00:00:00</span> <a class="legacy-link" href="legacy/">LEGACY VERSION</a></div>
+            </header>
+
+            <section class="hero terminal-box" id="about">
+                <div class="hero__identity">
+                    <div class="eyebrow">[ SYSTEM PROFILE / USER 326 ]</div>
+                    <pre class="ascii-name" aria-label="VLM326">
+ █████   █████ █████       ██████   ██████  ████████   ████████   ████████ 
+▒▒███   ▒▒███ ▒▒███       ▒▒██████ ██████  ███▒▒▒▒███ ███▒▒▒▒███ ███▒▒▒▒███
+ ▒███    ▒███  ▒███        ▒███▒█████▒███ ▒▒▒    ▒███▒▒▒    ▒███▒███   ▒▒▒ 
+ ▒███    ▒███  ▒███        ▒███▒▒███ ▒███    ██████▒    ███████ ▒█████████ 
+ ▒▒███   ███   ▒███        ▒███ ▒▒▒  ▒███   ▒▒▒▒▒▒███  ███▒▒▒▒  ▒███▒▒▒▒███
+  ▒▒▒█████▒    ▒███      █ ▒███      ▒███  ███   ▒███ ███      █▒███   ▒███
+    ▒▒███      ███████████ █████     █████▒▒████████ ▒██████████▒▒████████ 
+     ▒▒▒      ▒▒▒▒▒▒▒▒▒▒▒ ▒▒▒▒▒     ▒▒▒▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒  
+                                                                           
+                                                                           
+                                                                           </pre>
+                    <p class="hero__role">RUST DEVELOPER <span>/</span> RESEARCHER <span>/</span> LINUX ENTHUSIAST</p>
+                    <p class="hero__copy">SYSTEMS SOFTWARE, LANGUAGE TOOLS, AND STORAGE RESEARCH.<br>BUILDING SMALL
+                        MACHINES THAT DO ONE THING WELL.</p>
+                    <div class="hero__actions">
+                        <a href="#projects" class="terminal-button">[ VIEW PROJECTS ]</a>
+                        <a href="https://github.com/Vlm326" target="_blank" rel="noreferrer"
+                            class="terminal-button terminal-button--quiet">[ GITHUB ↗ ]</a>
+                    </div>
+                </div>
+                <div class="stats" aria-label="GitHub statistics">
+                    <div class="panel-title">GITHUB / REMOTE STATUS</div>
+                    <dl>
+                        <div>
+                            <dt>CONNECTION</dt>
+                            <dd class="live-value">ONLINE</dd>
+                        </div>
+                        <div>
+                            <dt>REPOSITORIES</dt>
+                            <dd id="repoCount">--</dd>
+                        </div>
+                        <div>
+                            <dt>FOLLOWERS</dt>
+                            <dd id="followers">--</dd>
+                        </div>
+                        <div>
+                            <dt>PUBLIC GISTS</dt>
+                            <dd id="gists">--</dd>
+                        </div>
+                        <div>
+                            <dt>LAST SYNC</dt>
+                            <dd id="lastSync">03/08/2026</dd>
+                        </div>
+                    </dl>
+                    <div class="stats__footer"><span class="pulse"></span> API CACHE: <span
+                            id="apiState">CONNECTING</span></div>
+                </div>
+            </section>
+
+            <nav class="menu terminal-box" aria-label="Terminal navigation">
+                <div class="panel-title">COMMAND INDEX</div>
+                <div class="menu__items">
+                    <a href="#about"><b>[1]</b> ABOUT</a>
+                    <a href="#projects"><b>[2]</b> PROJECTS</a>
+                    <a href="#skills"><b>[4]</b> SKILLS</a>
+                    <a href="#activity"><b>[5]</b> ACTIVITY</a>
+                    <a href="#achievements"><b>[6]</b> ACHIEVEMENTS</a>
+                    <a href="#contact"><b>[7]</b> CONTACT</a>
+                    <a href="#terminal"><b>[8]</b> TERMINAL</a>
+                </div>
+            </nav>
+
+            <div class="dashboard-grid">
+                <section class="panel terminal-box" id="skills">
+                    <div class="panel-title">[01] SYSTEM INFO</div>
+                    <div class="key-value">
+                        <p><span>HOSTNAME</span> portfolio</p>
+                        <p><span>USER</span> VLM326</p>
+                        <p><span>SHELL</span> zsh</p>
+                        <p><span>OS</span> Fedora Linux</p>
+                        <p><span>EDITOR</span> VS Code</p>
+                        <p><span>LOCATION</span> Saint Petersburg</p>
+                    </div>
+                    <div class="subheading">LANGUAGES / TOOLS</div>
+                    <div class="skill-list">
+                        <span>RUST</span><span>C</span><span>GO</span><span>PYTHON</span><span>KOTLIN</span><span>OCAML</span><span>SQL</span><span>VIBE
+                            CODING</span>
+                    </div>
+                </section>
+
+                <section class="panel monitor terminal-box" aria-label="Developer monitor">
+                    <div class="panel-title">[02] DEVELOPER MONITOR</div>
+                    <div class="monitor-grid">
+                        <div><span>GITHUB ACTIVITY</span><b id="monitorActivity">SYNCING</b></div>
+                        <div><span>LAST COMMIT</span><b id="lastCommit">--</b></div>
+                        <div><span>CONTRIBUTIONS</span><b id="contributions">PUBLIC FEED</b></div>
+                        <div><span>REPOSITORIES</span><b id="monitorRepos">--</b></div>
+                        <div><span>API CACHE</span><b id="monitorCache">COLD</b></div>
+                        <div><span>UPTIME</span><b id="uptime">000:00:00:00</b></div>
+                    </div>
+                    <div class="monitor__readout"><span>REMOTE: github.com/Vlm326</span><strong
+                            id="monitorSync">WAITING</strong></div>
+                </section>
+
+                <section class="panel terminal-box about-panel">
+                    <div class="panel-title">[03] ABOUT.TXT</div>
+                    <p>SOFTWARE ENGINEERING STUDENT. I LIKE FAST CODE, CLEAR ABSTRACTIONS, AND UNIX SYSTEMS THAT CAN BE
+                        EXPLAINED LINE BY LINE.</p>
+                    <p class="dim">CURRENTLY EXPLORING:</p>
+                    <ul class="prompt-list">
+                        <li>FILE SYSTEMS &amp; DEDUPLICATION</li>
+                        <li>COMPILER CONSTRUCTION</li>
+                        <li>PARALLEL ALGORITHMS</li>
+                    </ul>
+                </section>
+            </div>
+
+            <section class="section-block terminal-box" id="projects">
+                <div class="section-heading"><span>[04] PROJECT REGISTRY</span><span class="dim">REPOSITORIES // <span
+                            id="projectCount">--</span> FOUND</span></div>
+                <div class="registry-controls" role="group" aria-label="Project sorting"><button
+                        class="sort-button is-active" data-sort="stars">[★ STARS]</button><button class="sort-button"
+                        data-sort="updated">[↻ UPDATED]</button></div>
+                <div class="project-grid" id="projectGrid">
+                    <article class="project-card">
+                        <div class="project-card__top"><span>LOCAL_SCRIPT</span><span class="live-value">ACTIVE</span>
+                        </div>
+                        <p>SAFE SCRIPT EXECUTION WITH AST ANALYSIS, SANDBOXING, AND LLM-AWARE LIMITS.</p>
+                        <div class="project-card__tags">RUST · PYTHON · LUA</div><a
+                            href="https://github.com/Vlm326/LocalScript" target="_blank" rel="noreferrer">[ OPEN REPO ↗
+                            ]</a>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-card__top"><span>NETANALYSIS</span><span class="live-value">STABLE</span>
+                        </div>
+                        <p>HIGH-PERFORMANCE GRAPH ANALYSIS WITH BFS, SCC, LANDMARK INDEXING, AND RAYON.</p>
+                        <div class="project-card__tags">RUST · RAYON · GRAPHS</div><a
+                            href="https://github.com/Vlm326/NetAnalysys" target="_blank" rel="noreferrer">[ OPEN REPO ↗
+                            ]</a>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-card__top"><span>RUSTHON</span><span class="live-value">BUILDING</span>
+                        </div>
+                        <p>PYTHON-INSPIRED LANGUAGE IMPLEMENTED IN RUST. LEXER, PARSER, AST, INTERPRETER.</p>
+                        <div class="project-card__tags">RUST · PARSER · AST</div><a
+                            href="https://github.com/Vlm326/Rusthon" target="_blank" rel="noreferrer">[ OPEN REPO ↗
+                            ]</a>
+                    </article>
+                </div>
+            </section>
+
+            <div class="lower-grid">
+                <section class="section-block terminal-box" id="activity">
+                    <div class="section-heading"><span>[05] ACTIVITY LOG</span><span class="dim">GITHUB FEED</span>
+                    </div>
+                    <div class="activity" id="activityFeed">
+                        <p><time>[ 2h ]</time> PUSHED TO <b>MARLINE</b></p>
+                        <p><time>[ 5h ]</time> UPDATED <b>README.MD</b></p>
+                        <p><time>[ 1d ]</time> CREATED NEW REPOSITORY</p>
+                        <p><time>[ 3d ]</time> MERGED PULL REQUEST</p>
+                    </div>
+                </section>
+                <section class="section-block terminal-box achievements" id="achievements">
+                    <div class="section-heading"><span>[06] ACHIEVEMENTS.LOG</span><span class="dim">MILESTONES</span>
+                    </div>
+                    <div class="achievement-list">
+                        <article>
+                            <div class="achievement-title"><span>ICPC</span><span class="live-value">[ VERIFIED ]</span>
+                            </div>
+                            <p>PARTICIPANT. REACHED THE ICPC QUARTERFINAL STAGE DURING FIRST YEAR.</p>
+                        </article>
+                        <article>
+                            <div class="achievement-title"><span>RUST ANALYZER</span><span class="live-value">[ OPEN
+                                    SOURCE ]</span></div>
+                            <p>CONTRIBUTOR TO THE RUST TOOLING ECOSYSTEM.</p><a
+                                href="https://github.com/rust-lang/rust-analyzer/pulls?q=is%3Apr+author%3AVlm326"
+                                target="_blank" rel="noreferrer">[ PR / DETAILS ↗ ]</a>
+                        </article>
+                        <article>
+                            <div class="achievement-title"><span>SPBU SUMMER SCHOOL</span><span class="live-value">[ 3RD
+                                    PLACE ]</span></div>
+                            <p>DEDUPLICATION PROJECT: MARLINE. SUMMER PROGRAMMING SCHOOL, SPBU.</p><a
+                                href="https://github.com/admitrievtsev/marline/pull/2" target="_blank"
+                                rel="noreferrer">[ OPEN PR ↗ ]</a>
+                        </article>
+                    </div>
+                </section>
+            </div>
+
+            <section class="terminal-window terminal-box" id="terminal">
+                <div class="terminal-window__bar"><span>[07] INTERACTIVE SHELL</span><span class="dim">type 'help' for
+                        commands</span></div>
+                <div class="terminal-output" id="terminalOutput" aria-live="polite">
+                    <p>VLM326 PORTFOLIO SHELL v1.0.26</p>
+                    <p>CONNECTED TO <span class="live-value">PORTFOLIO</span>. ALL SYSTEMS NOMINAL.</p>
+                    <p class="dim">type 'help' to list available commands.</p>
+                </div>
+                <form class="terminal-input" id="terminalForm"><label
+                        for="commandInput">VLM326@portfolio:~$</label><input id="commandInput" autocomplete="off"
+                        spellcheck="false" aria-label="Terminal command"><span class="fake-cursor"
+                        aria-hidden="true"></span></form>
+            </section>
+
+            <footer class="footer terminal-box" id="contact">
+                <div><strong>SYSTEM READY</strong><span>CONNECTED</span><span>UPTIME <b
+                            id="footerUptime">000:00:00</b></span></div>
+                <div><span>VLM326 // BUILD 2026.08</span><a href="mailto:morozvv75@gmail.com">CONTACT ↗</a><a
+                        href="https://github.com/Vlm326" target="_blank" rel="noreferrer">GITHUB ↗</a><a
+                        href="legacy/">LEGACY VERSION ↗</a></div>
+            </footer>
+        </div>
+    </main>
+    <script src="app.js"></script>
+</body>
+
+</html>
