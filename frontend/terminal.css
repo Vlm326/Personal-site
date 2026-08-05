@@ -106,8 +106,8 @@ input {
 }
 
 .crt-shell__noise {
-    opacity: .06;
-    background: repeating-linear-gradient(0deg, transparent 0 2px, #baffca 3px, transparent 4px);
+    opacity: .13;
+    background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(186, 255, 202, .8) 2px 4px, transparent 4px 6px);
     mix-blend-mode: screen;
     animation: scan 8s linear infinite
 }
@@ -118,24 +118,33 @@ input {
     left: 0;
     right: 0;
     top: -8vh;
-    height: 2px;
-    background: rgba(160, 255, 190, .38);
-    box-shadow: 0 0 8px rgba(0, 255, 102, .65), 0 0 22px rgba(0, 255, 102, .3);
-    opacity: .55;
-    animation: refresh-line 11s linear infinite
+    height: 4px;
+    background: rgba(210, 255, 220, .9);
+    box-shadow: 0 0 12px rgba(0, 255, 102, 1), 0 0 34px rgba(0, 255, 102, .75);
+    opacity: .95;
+    animation: refresh-line 7s linear infinite
 }
 
 .screen {
     position: relative;
     max-width: 1480px;
     margin: auto;
-    animation: flicker 7s infinite
+    animation: screen-glitch 60s infinite, flicker 20s infinite;
+    transition: filter .4s ease
 }
 
 .terminal-box {
     border: 1px solid var(--line);
     box-shadow: 0 0 7px rgba(0, 255, 102, .12), inset 0 0 16px rgba(0, 255, 102, .035);
     position: relative
+}
+
+.theme-amber .screen {
+    filter: hue-rotate(-95deg) saturate(1.15)
+}
+
+.theme-white .screen {
+    filter: grayscale(1) brightness(1.35) contrast(.95)
 }
 
 .terminal-box:before {
@@ -168,10 +177,20 @@ input {
     justify-content: flex-end
 }
 
+.clock-group {
+    display: flex;
+    gap: 5px;
+    align-items: center
+}
+
+.clock-group b {
+    color: var(--green-2)
+}
+
 .topbar__brand {
     font: 42px VT323, monospace;
     letter-spacing: .16em;
-    text-shadow: 0 0 8px var(--green)
+    text-shadow: 0 0 8px var(--green);
 }
 
 .status-dot,
@@ -182,7 +201,7 @@ input {
     background: var(--green);
     box-shadow: 0 0 7px var(--green);
     display: inline-block;
-    animation: blink 1.5s steps(2) infinite
+    animation: dot-blink 1.8s ease-in-out infinite
 }
 
 .hero {
@@ -492,10 +511,73 @@ progress::-webkit-progress-value {
     font-size: 11px
 }
 
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 13px;
+    margin-top: 15px
+}
+
+.contact-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid #116d39;
+    padding: 16px;
+    transition: .2s
+}
+
+.contact-card:hover,
+.contact-card:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 14px var(--glow);
+    transform: translateY(-2px);
+    outline: none
+}
+
+.contact-card--primary {
+    border-color: var(--green);
+    box-shadow: 0 0 10px var(--glow)
+}
+
+.contact-card__label {
+    font-size: 10px;
+    letter-spacing: .12em;
+    color: var(--green-2)
+}
+
+.contact-card__value {
+    font-size: 14px;
+    color: var(--green);
+    text-shadow: 0 0 5px var(--green);
+    word-break: break-all
+}
+
+.contact-card__link {
+    font-size: 11px;
+    margin-top: 6px
+}
+
 .lower-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 13px
+}
+
+.mem-bar {
+    height: 6px;
+    border: 1px solid #116d39;
+    margin-top: 14px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, .35)
+}
+
+.mem-bar span {
+    display: block;
+    height: 100%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--glow);
+    transition: width .9s ease
 }
 
 .tree {
@@ -565,6 +647,7 @@ progress::-webkit-progress-value {
 }
 
 .terminal-input {
+    position: relative;
     display: flex;
     padding: 10px 17px;
     border-top: 1px solid #0c552b;
@@ -585,15 +668,19 @@ progress::-webkit-progress-value {
     flex: 1;
     margin-left: 8px;
     color: var(--green);
-    caret-color: var(--green);
+    caret-color: transparent;
     text-transform: lowercase
 }
 
 .fake-cursor {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     width: 8px;
     height: 16px;
     background: var(--green);
-    display: none;
+    box-shadow: 0 0 6px var(--green);
+    display: block;
     animation: blink 1s steps(2) infinite
 }
 
@@ -629,15 +716,50 @@ progress::-webkit-progress-value {
 }
 
 @keyframes refresh-line {
-    0% { transform: translateY(0); opacity: 0; }
-    5% { opacity: .55; }
-    88% { opacity: .55; }
-    100% { transform: translateY(116vh); opacity: 0; }
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    5% {
+        opacity: .55;
+    }
+
+    88% {
+        opacity: .55;
+    }
+
+    100% {
+        transform: translateY(116vh);
+        opacity: 0;
+    }
 }
 
 @keyframes blink {
     50% {
         opacity: 0
+    }
+}
+
+@keyframes dot-blink {
+    0% {
+        opacity: 1;
+    }
+
+    40% {
+        opacity: 0.2;
+    }
+
+    50% {
+        opacity: 0.15;
+    }
+
+    60% {
+        opacity: 0.3;
+    }
+
+    100% {
+        opacity: 1;
     }
 }
 
@@ -649,11 +771,11 @@ progress::-webkit-progress-value {
     }
 
     49% {
-        opacity: .985
+        opacity: 0.985
     }
 
     50% {
-        opacity: .97
+        opacity: 0.97
     }
 
     51% {
@@ -661,14 +783,187 @@ progress::-webkit-progress-value {
     }
 
     75% {
-        opacity: .99
+        opacity: 0.99
     }
+
+    90% {
+        opacity: 0.8
+    }
+}
+
+@keyframes screen-glitch {
+
+    0%,
+    100%,
+    49.3% {
+        transform: none;
+        filter: none;
+        opacity: 1;
+    }
+
+    49.35% {
+        transform: translate(10px, -3px) skewX(-1deg);
+        filter: drop-shadow(10px 0 0 rgba(255, 0, 64, .55)) drop-shadow(-10px 0 0 rgba(0, 255, 204, .55));
+        opacity: .92;
+    }
+
+    49.4% {
+        transform: translate(-7px, 2px);
+        filter: drop-shadow(-8px 0 0 rgba(255, 0, 64, .5)) drop-shadow(8px 0 0 rgba(0, 255, 204, .5));
+        opacity: .95;
+    }
+
+    49.45% {
+        transform: translate(12px, 1px);
+        filter: drop-shadow(7px 0 0 rgba(255, 0, 64, .45)) drop-shadow(-7px 0 0 rgba(0, 255, 204, .45));
+        opacity: 1;
+    }
+
+    49.5% {
+        transform: translate(-9px, -2px) skewX(.8deg);
+        filter: drop-shadow(-9px 0 0 rgba(255, 0, 64, .55)) drop-shadow(9px 0 0 rgba(0, 255, 204, .55));
+        opacity: .9;
+    }
+
+    49.55% {
+        transform: translate(5px, 0);
+        filter: drop-shadow(5px 0 0 rgba(255, 0, 64, .4)) drop-shadow(-5px 0 0 rgba(0, 255, 204, .4));
+        opacity: .96;
+    }
+
+    49.6% {
+        transform: none;
+        filter: none;
+        opacity: 1;
+    }
+}
+
+@keyframes glitch-a {
+
+    0%,
+    100%,
+    49.15% {
+        translate: none;
+    }
+
+    49.2% {
+        translate: 44px -10px;
+    }
+
+    49.25% {
+        translate: -40px 8px;
+    }
+
+    49.3% {
+        translate: 54px 14px;
+    }
+
+    49.35% {
+        translate: -32px -6px;
+    }
+
+    49.4% {
+        translate: none;
+    }
+}
+
+@keyframes glitch-b {
+
+    0%,
+    100%,
+    49.45% {
+        translate: none;
+    }
+
+    49.5% {
+        translate: -48px 12px;
+    }
+
+    49.55% {
+        translate: 36px -8px;
+    }
+
+    49.6% {
+        translate: -58px -16px;
+    }
+
+    49.65% {
+        translate: 26px 6px;
+    }
+
+    49.7% {
+        translate: none;
+    }
+}
+
+@keyframes glitch-c {
+
+    0%,
+    100%,
+    49.75% {
+        translate: none;
+    }
+
+    49.8% {
+        translate: 38px 14px;
+    }
+
+    49.85% {
+        translate: -50px -12px;
+    }
+
+    49.9% {
+        translate: 60px 8px;
+    }
+
+    49.95% {
+        translate: -28px -10px;
+    }
+
+    50% {
+        translate: none;
+    }
+}
+
+.topbar,
+.menu,
+.footer {
+    animation: glitch-a 60s infinite;
+}
+
+.hero,
+.dashboard-grid,
+.lower-grid,
+.terminal-window {
+    animation: glitch-b 60s infinite;
+}
+
+.project-card,
+.contact-card,
+.achievement-list article,
+.ascii-name {
+    animation: glitch-c 60s infinite;
 }
 
 @keyframes scan {
     to {
         background-position: 0 100px
     }
+}
+
+
+
+
+
+.reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity .5s ease, transform .5s ease
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: none
 }
 
 @media (prefers-reduced-motion:reduce) {
@@ -680,7 +975,17 @@ progress::-webkit-progress-value {
         animation-iteration-count: 1 !important;
         scroll-behavior: auto !important
     }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none
+    }
 }
+
+
+
+
 
 @media(max-width:850px) {
     .crt-shell {
@@ -734,8 +1039,12 @@ progress::-webkit-progress-value {
         grid-template-columns: 1fr
     }
 
+    .contact-grid {
+        grid-template-columns: 1fr
+    }
+
     .ascii-name {
-        font-size: clamp(5px, 1.5vw, 12px)
+        font-size: clamp(5px, 1.5vw, 12px);
     }
 
     .footer {

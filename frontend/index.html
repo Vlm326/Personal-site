@@ -30,7 +30,10 @@
                 </div>
                 <div class="topbar__brand" aria-label="VLM326 portfolio">VLM326</div>
                 <div class="topbar__status"><i class="status-dot"></i> ONLINE <span class="hide-small">//</span> <span
-                        id="clock">00:00:00</span> <a class="legacy-link" href="legacy/">LEGACY VERSION</a></div>
+                        class="clock-group"><b>SPB</b><span id="clock">00:00:00</span></span><span
+                        class="clock-group hide-small"><b>UTC</b><span id="clockUtc">00:00:00</span></span><span
+                        class="clock-group hide-small"><b>TYO</b><span id="clockTokyo">00:00:00</span></span> <a
+                        class="legacy-link" href="legacy/">LEGACY VERSION</a></div>
             </header>
 
             <section class="hero terminal-box" id="about">
@@ -48,7 +51,7 @@
                                                                            
                                                                            
                                                                            </pre>
-                    <p class="hero__role">RUST DEVELOPER <span>/</span> RESEARCHER <span>/</span> LINUX ENTHUSIAST</p>
+                    <p class="hero__role">RUST DEVELOPER <span>/</span> STUDENT <span>/</span> LINUX ENTHUSIAST</p>
                     <p class="hero__copy">SYSTEMS SOFTWARE, LANGUAGE TOOLS, AND STORAGE RESEARCH.<br>BUILDING SMALL
                         MACHINES THAT DO ONE THING WELL.</p>
                     <div class="hero__actions">
@@ -93,9 +96,10 @@
                     <a href="#projects"><b>[2]</b> PROJECTS</a>
                     <a href="#skills"><b>[4]</b> SKILLS</a>
                     <a href="#activity"><b>[5]</b> ACTIVITY</a>
-                    <a href="#achievements"><b>[6]</b> ACHIEVEMENTS</a>
-                    <a href="#contact"><b>[7]</b> CONTACT</a>
-                    <a href="#terminal"><b>[8]</b> TERMINAL</a>
+                    <a href="#hostSystem"><b>[6]</b> HOST</a>
+                    <a href="#achievements"><b>[7]</b> ACHIEVEMENTS</a>
+                    <a href="#contact"><b>[8]</b> CONTACT</a>
+                    <a href="#terminal"><b>[9]</b> TERMINAL</a>
                 </div>
             </nav>
 
@@ -189,8 +193,21 @@
                         <p><time>[ 3d ]</time> MERGED PULL REQUEST</p>
                     </div>
                 </section>
+                <section class="section-block terminal-box" id="hostSystem">
+                    <div class="section-heading"><span>[06] HOST SYSTEM</span><span class="dim" id="hostSync">LINKING
+                        ...</span></div>
+                    <div class="key-value">
+                        <p><span>OS</span><b id="hostOs">--</b></p>
+                        <p><span>KERNEL</span><b id="hostKernel">--</b></p>
+                        <p><span>HOSTNAME</span><b id="hostName">--</b></p>
+                        <p><span>MEMORY</span><b id="hostMem">--</b></p>
+                        <p><span>SWAP</span><b id="hostSwap">--</b></p>
+                    </div>
+                    <div class="mem-bar" aria-label="Memory usage"><span id="memBar" style="width:0%"></span></div>
+                    <div class="subheading">LIVE / HOST METRICS</div>
+                </section>
                 <section class="section-block terminal-box achievements" id="achievements">
-                    <div class="section-heading"><span>[06] ACHIEVEMENTS.LOG</span><span class="dim">MILESTONES</span>
+                    <div class="section-heading"><span>[07] ACHIEVEMENTS.LOG</span><span class="dim">MILESTONES</span>
                     </div>
                     <div class="achievement-list">
                         <article>
@@ -216,8 +233,26 @@
                 </section>
             </div>
 
+            <section class="section-block terminal-box" id="contact">
+                <div class="section-heading"><span>[08] ESTABLISH LINK</span><span class="dim">RESPONSE TIME
+                        ~24H</span></div>
+                <div class="contact-grid">
+                    <a class="contact-card contact-card--primary" href="https://t.me/VLM326" target="_blank"
+                        rel="noreferrer">
+                        <span class="contact-card__label">TELEGRAM // PREFERRED</span>
+                        <span class="contact-card__value">@VLM326</span>
+                        <span class="contact-card__link">[ SEND SIGNAL ↗ ]</span>
+                    </a>
+                    <a class="contact-card" href="mailto:morozvv75@gmail.com">
+                        <span class="contact-card__label">EMAIL // DIRECT</span>
+                        <span class="contact-card__value">morozvv75@gmail.com</span>
+                        <span class="contact-card__link">[ WRITE MAIL ↗ ]</span>
+                    </a>
+                </div>
+            </section>
+
             <section class="terminal-window terminal-box" id="terminal">
-                <div class="terminal-window__bar"><span>[07] INTERACTIVE SHELL</span><span class="dim">type 'help' for
+                <div class="terminal-window__bar"><span>[09] INTERACTIVE SHELL</span><span class="dim">type 'help' for
                         commands</span></div>
                 <div class="terminal-output" id="terminalOutput" aria-live="polite">
                     <p>VLM326 PORTFOLIO SHELL v1.0.26</p>
@@ -230,7 +265,7 @@
                         aria-hidden="true"></span></form>
             </section>
 
-            <footer class="footer terminal-box" id="contact">
+            <footer class="footer terminal-box">
                 <div><strong>SYSTEM READY</strong><span>CONNECTED</span><span>UPTIME <b
                             id="footerUptime">000:00:00</b></span></div>
                 <div><span>VLM326 // BUILD 2026.08</span><a href="mailto:morozvv75@gmail.com">CONTACT ↗</a><a
