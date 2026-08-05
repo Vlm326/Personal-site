@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 mod config;
+mod system_info_utils;
 use axum::{
     Json, Router,
     extract::State,
@@ -26,7 +27,6 @@ async fn main() {
         .build()
         .unwrap();
 
-    // Resolve frontend from the project path instead of the shell's cwd.
     let frontend_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .expect("backend must live inside the project")
@@ -40,6 +40,7 @@ async fn main() {
             get(programming_languages_by_repo),
         )
         .route("/api/languages_by_LOC", get(programming_languages_by_loc))
+        .route("/api/system_info", get(get_system_info_endpoint))
         .fallback_service(ServeDir::new(frontend_dir))
         .with_state(client);
 
@@ -189,4 +190,9 @@ async fn programming_languages_by_loc(
     };
 
     Ok(Json(serde_json::to_value(percents).unwrap()))
+}
+
+async fn get_system_info_endpoint() -> Result<Json<HashMap<String, String>>, (StatusCode, String)> {
+    let system_info = system_info_utils::get_system_info();
+    Ok(Json(system_info))
 }
