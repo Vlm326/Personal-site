@@ -74,9 +74,10 @@ const commands = {
     '  exit          close session (visual only)'
   ],
 
-  about: () => [
+about: () => [
+    'NAME: VLADISLAV MOROZ',
     'USER: VLM326',
-    'ROLE: RUST DEVELOPER / STUDENT',
+    'ROLE: RUST DEVELOPER / RESEARCHER',
     'FOCUS: SYSTEMS SOFTWARE, STORAGE, LANGUAGE TOOLS'
   ],
 
@@ -136,7 +137,7 @@ const commands = {
   ],
 
   cat: () => [
-    'VLM326 IS A SOFTWARE ENGINEERING STUDENT BUILDING SYSTEMS SOFTWARE WITH RUST.',
+    'VLADISLAV MOROZ (VLM326) IS A SOFTWARE ENGINEERING STUDENT BUILDING SYSTEMS SOFTWARE WITH RUST.',
     'SEE /research AND /achievements.log FOR CURRENT WORK.'
   ],
 
@@ -446,9 +447,7 @@ async function fetchGithub() {
 // ============================================================
 async function fetchEvents() {
   try {
-    const response = await fetch(
-      'https://api.github.com/users/Vlm326/events/public'
-    );
+    const response = await fetch('/api/events');
     github.events = response.ok ? await response.json() : [];
     $('#contributions').textContent = github.events.length
       ? `${github.events.length} EVENTS`
