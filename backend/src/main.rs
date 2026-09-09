@@ -60,7 +60,7 @@ async fn main() {
     };
 
     // Refresh GitHub data immediately on boot, then at least once a day.
-    let refresh_interval = Duration::from_secs(config.server.refresh_interval_hours * 3600);
+    let refresh_interval = Duration::from_secs(config.server.refresh_interval_minutes * 60);
     tokio::spawn(async move {
         loop {
             refresh_github(&client, &cache).await;

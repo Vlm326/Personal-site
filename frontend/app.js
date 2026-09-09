@@ -18,7 +18,7 @@ const fallbackRepos = [
     size: 420,
     pushed_at: '2026-06-01',
     html_url: 'https://github.com/Vlm326/LocalScript',
-    description: 'SAFE SCRIPT EXECUTION WITH AST ANALYSIS, SANDBOXING, AND LLM-AWARE LIMITS.'
+    description: 'SCRIPT EXECUTION WITH AST ANALYSIS AND SANDBOXING.'
   },
   {
     name: 'NetAnalysys',
@@ -27,7 +27,7 @@ const fallbackRepos = [
     size: 510,
     pushed_at: '2026-05-15',
     html_url: 'https://github.com/Vlm326/NetAnalysys',
-    description: 'HIGH-PERFORMANCE GRAPH ANALYSIS WITH BFS, SCC, LANDMARK INDEXING, AND RAYON.'
+    description: 'GRAPH ANALYSIS WITH BFS, SCC, AND LANDMARK INDEXING.'
   },
   {
     name: 'Rusthon',
@@ -52,10 +52,10 @@ let hostInfo = {};
 const commands = {
   help: () => [
     'AVAILABLE COMMANDS',
-    '  about         print system profile',
-    '  projects      list project registry',
+    '  about         print about information',
+    '  projects      list projects',
     '  research      list research tree',
-    '  achievements  show milestones',
+    '  achievements  show experience',
     '  skills        show language matrix',
     '  github        open remote profile',
     '  contact       show communication links',
@@ -64,28 +64,28 @@ const commands = {
     '  pwd           print working directory',
     '  ls            list directory',
     '  cat           read about.txt',
-    '  neofetch      display system summary',
+    '  neofetch      display computer summary',
     '  history       show command history',
     '  date          print local time',
     '  uptime        print session uptime',
     '  social        show social handles',
     '  repo NAME     open repository',
-    '  theme         display monitor profile',
+    '  theme         display color theme',
     '  exit          close session (visual only)'
   ],
 
-about: () => [
-    'NAME: VLADISLAV MOROZ',
+  about: () => [
+    'HI, I AM VLADISLAV MOROZ',
     'USER: VLM326',
-    'ROLE: RUST DEVELOPER / RESEARCHER',
-    'FOCUS: SYSTEMS SOFTWARE, STORAGE, LANGUAGE TOOLS'
+    'SPBU STUDENT',
+    'LEARNING RUST AND IMPROVING MY COMPUTER SCIENCE SKILLS'
   ],
 
   projects: () => {
     if (!github.repos.length) {
       return [
         'LOCAL_SCRIPT  ::  RUST / PYTHON / LUA',
-        'NETANALYSIS   ::  RUST / RAYON',
+        'NETANALYSIS   ::  RUST / GRAPHS',
         'RUSTHON       ::  RUST / PARSERS'
       ];
     }
@@ -97,7 +97,6 @@ about: () => [
   research: () => [
     'papers/',
     '├─ storage-deduplication.md',
-    '├─ parallel-indexing.md',
     'algorithms/',
     'benchmarks/',
     'notes/'
@@ -105,7 +104,7 @@ about: () => [
 
   achievements: () => [
     'ICPC :: QUARTERFINAL STAGE / FIRST YEAR',
-    'RUST ANALYZER :: OPEN SOURCE CONTRIBUTOR',
+    'RUST ANALYZER :: CONTRIBUTOR',
     'SPBU SUMMER SCHOOL :: 3RD PLACE / MARLINE'
   ],
 
@@ -137,8 +136,8 @@ about: () => [
   ],
 
   cat: () => [
-    'VLADISLAV MOROZ (VLM326) IS A SOFTWARE ENGINEERING STUDENT BUILDING SYSTEMS SOFTWARE WITH RUST.',
-    'SEE /research AND /achievements.log FOR CURRENT WORK.'
+    'I AM VLADISLAV MOROZ (VLM326), A SPBU STUDENT LEARNING RUST AND IMPROVING MY COMPUTER SCIENCE SKILLS.',
+    'SEE /research AND /achievements.log FOR MORE INFORMATION.'
   ],
 
   neofetch: () => [
@@ -609,6 +608,7 @@ renderProjects();
 fetchGithub();
 fetchSystemInfo();
 setInterval(fetchSystemInfo, 60000);
+setInterval(fetchEvents, 5 * 60 * 1000);
 applyTheme(currentTheme());
 
 // ============================================================

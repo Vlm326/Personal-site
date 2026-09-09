@@ -17,12 +17,12 @@ pub struct GithubConfig {
 pub struct ServerConfig {
     pub host: String,
     pub port: u16,
-    #[serde(default = "default_refresh_hours")]
-    pub refresh_interval_hours: u64,
+    #[serde(default = "default_refresh_minutes")]
+    pub refresh_interval_minutes: u64,
 }
 
-fn default_refresh_hours() -> u64 {
-    24
+fn default_refresh_minutes() -> u64 {
+    60
 }
 
 impl Config {
