@@ -45,144 +45,298 @@ let historyIndex = 0;
 let github = { repos: fallbackRepos, user: null, events: [] };
 let activeSort = 'stars';
 let hostInfo = {};
+let currentLanguage = 'en';
+let githubStatus = 'syncing';
+let githubLastChecked = null;
+
+const translations = {
+  en: {
+    'page.title': 'Vladislav Moroz — Portfolio',
+    'boot.aria': 'System boot sequence', 'boot.loading': 'LOADING...', 'boot.complete': 'SIGNAL LOCKED // SYSTEM READY',
+    'topbar.site': 'PERSONAL SITE', 'topbar.online': 'ONLINE', 'topbar.legacy': 'LEGACY VERSION',
+    'topbar.legacyFooter': 'LEGACY VERSION ↗', 'topbar.brand': 'Vlm326 portfolio',
+    'language.toggleLabel': 'Switch to Russian',
+    'hero.eyebrow': '[ ABOUT / USER 326 ]', 'hero.role': 'SOFTWARE ENGINEERING STUDENT <span>/</span> RUST <span>/</span> SYSTEMS',
+    'hero.copy': 'SOFTWARE ENGINEERING STUDENT AT SPBU. INTERESTED IN RUST, SYSTEMS PROGRAMMING, AND LOW-LEVEL SOFTWARE.',
+    'hero.projects': '[ VIEW PROJECTS ]', 'hero.github': '[ GITHUB ↗ ]', 'hero.cv': '[ CV ▾ ]',
+    'hero.cvRussian': 'RUSSIAN CV ↗', 'hero.cvEnglish': 'ENGLISH CV ↗',
+    'stats.aria': 'GitHub statistics', 'stats.title': 'GITHUB', 'stats.connection': 'CONNECTION',
+    'stats.repositories': 'REPOSITORIES', 'stats.followers': 'FOLLOWERS', 'stats.gists': 'PUBLIC GISTS',
+    'stats.lastCheck': 'LAST CHECK', 'stats.apiCache': 'API CACHE:',
+    'menu.aria': 'Terminal navigation', 'menu.title': 'COMMAND INDEX', 'menu.about': 'ABOUT', 'menu.projects': 'PROJECTS', 'menu.skills': 'SKILLS',
+    'menu.activity': 'ACTIVITY', 'menu.host': 'HOST', 'menu.experience': 'EXPERIENCE', 'menu.contact': 'CONTACT', 'menu.terminal': 'TERMINAL',
+    'profile.title': '[01] PROFILE', 'profile.hostname': 'HOSTNAME', 'profile.hostnameValue': 'portfolio',
+    'profile.user': 'USER', 'profile.shell': 'SHELL', 'profile.os': 'OS', 'profile.editor': 'EDITOR',
+    'profile.location': 'LOCATION', 'profile.locationValue': 'Saint Petersburg', 'profile.skills': 'SKILLS / TOOLS',
+    'monitor.title': '[02] ACTIVITY', 'monitor.githubActivity': 'GITHUB ACTIVITY', 'monitor.lastCommit': 'LAST PUSH',
+    'monitor.contributions': 'CONTRIBUTIONS', 'monitor.uptime': 'UPTIME', 'monitor.remote': 'REMOTE: github.com/Vlm326',
+    'about.title': '[03] ABOUT.TXT',
+    'about.copy': 'I AM VLADISLAV MOROZ, A SOFTWARE ENGINEERING STUDENT AT SPBU. I BUILD SOFTWARE IN RUST AND CONTRIBUTE TO TEAM AND OPEN-SOURCE PROJECTS.',
+    'about.exploring': 'AREAS OF INTEREST:', 'about.topic1': 'SYSTEMS & LOW-LEVEL PROGRAMMING', 'about.topic2': 'COMPILERS & STATIC ANALYSIS',
+    'projects.title': '[04] PROJECTS', 'projects.repositories': 'REPOSITORIES', 'projects.found': 'FOUND',
+    'projects.sorting': 'Project sorting',
+    'projects.sortStars': '[★ STARS]', 'projects.sortUpdated': '[↻ UPDATED]', 'projects.openRepo': '[ OPEN REPO ↗ ]',
+    'projects.descriptionFallback': 'PUBLIC REPOSITORY / SOURCE AVAILABLE ON GITHUB.',
+    'projects.localScript': 'RUST SANDBOX SERVICE AND LUA SCRIPT VALIDATION / EXECUTION PIPELINE.',
+    'projects.netAnalysis': 'GRAPH ANALYSIS TOOLKIT WITH BFS, STRONGLY CONNECTED COMPONENTS, AND LANDMARK INDEXING.',
+    'projects.rusthon': 'PYTHON-INSPIRED LANGUAGE IMPLEMENTED IN RUST, WITH A LEXER, PARSER, AST, AND INTERPRETER.',
+    'activity.title': '[05] ACTIVITY LOG', 'activity.feed': 'GITHUB FEED',
+    'activity.waiting': 'WAITING FOR PUBLIC EVENTS...', 'activity.empty': 'NO PUBLIC EVENTS AVAILABLE.',
+    'host.title': '[06] HOST SYSTEM', 'host.os': 'OS', 'host.kernel': 'KERNEL', 'host.hostname': 'HOSTNAME',
+    'host.memory': 'MEMORY', 'host.swap': 'SWAP', 'host.info': 'HOST INFO', 'host.memoryUsage': 'Memory usage',
+    'experience.title': '[07] SELECTED WORK', 'experience.selected': 'SELECTED PROJECTS', 'experience.contributor': '[ CONTRIBUTOR ]',
+    'experience.marline': 'CONTRIBUTED AN IN-MEMORY POSTING-LIST INDEX AND JACCARD SIMILARITY OPERATIONS; THE PR WAS ACCEPTED UPSTREAM.',
+    'experience.merged': '[ MERGED PR ]',
+    'experience.rustAnalyzer': 'ADDED E0121 DIAGNOSTICS FOR TYPE-INFERENCE PLACEHOLDERS IN UNSUPPORTED CONTEXTS, WITH TESTS.',
+    'experience.prDetails': '[ PR / DETAILS ↗ ]', 'experience.personalProject': '[ PERSONAL PROJECT ]',
+    'experience.corrode': 'A RUST TOOL THAT COLLECTS GITHUB PR CONTEXT, RUNS LLM-ASSISTED REVIEWS, AND STORES REVIEW STATE IN SQLITE.',
+    'experience.teamProject': '[ TEAM PROJECT ]',
+    'experience.localScript': 'BUILT PART OF A RUST SANDBOX SERVICE AND THE PIPELINE FOR LUA SYNTAX / SAFETY CHECKS AND EXECUTION.',
+    'experience.openRepo': '[ OPEN REPO ↗ ]',
+    'contact.title': '[08] CONTACT', 'contact.response': 'TYPICAL RESPONSE: ~24H', 'contact.telegram': 'TELEGRAM',
+    'contact.open': '[ OPEN ↗ ]', 'contact.email': 'EMAIL // DIRECT', 'contact.writeMail': '[ WRITE EMAIL ↗ ]',
+    'terminal.title': '[09] TERMINAL', 'terminal.helpHint': "TYPE 'HELP' FOR COMMANDS", 'terminal.welcome': 'VLM326 TERMINAL v1.0.26',
+    'terminal.ready': 'TERMINAL READY.', 'terminal.helpPrompt': "TYPE 'HELP' TO LIST AVAILABLE COMMANDS.",
+    'terminal.prompt': 'VLM326@portfolio:~$', 'terminal.inputLabel': 'Terminal command',
+    'footer.ready': 'SYSTEM READY', 'footer.connected': 'CONNECTED', 'footer.contact': 'CONTACT ↗',
+    'status.syncing': 'SYNCING', 'status.publicFeed': 'PUBLIC FEED', 'status.cold': 'COLD', 'status.waiting': 'WAITING',
+    'status.linking': 'LINKING ...', 'status.linked': 'LINKED', 'status.offline': 'OFFLINE', 'status.offlineLocal': 'OFFLINE / LOCAL',
+    'status.cachedLive': 'CACHED / LIVE', 'status.active': 'ACTIVE', 'status.quiet': 'QUIET',
+    'status.eventsCount': '{count} EVENTS',
+    'time.hoursAgo': '{value}H AGO', 'time.daysAgo': '{value}D AGO',
+    'events.push': 'PUSHED TO', 'events.create': 'CREATED', 'events.pullRequest': 'UPDATED PULL REQUEST IN',
+    'events.review': 'REVIEWED PULL REQUEST IN', 'events.issues': 'UPDATED ISSUE IN', 'events.comment': 'COMMENTED IN',
+    'events.watch': 'STARRED', 'events.fork': 'FORKED', 'events.release': 'PUBLISHED RELEASE IN',
+    'events.delete': 'DELETED CONTENT IN', 'events.public': 'MADE PUBLIC', 'events.generic': 'ACTIVITY IN',
+    'command.help': [
+      'AVAILABLE COMMANDS', '  help         list commands', '  about        show profile', '  projects     list repositories',
+      '  research     list research topics', '  achievements show selected work', '  skills       show skills and tools',
+      '  github       open GitHub profile', '  contact      show contact links', '  clear        clear terminal output',
+      '  whoami       identify user', '  pwd          print working directory', '  ls           list directory',
+      '  cat          show profile summary', '  neofetch     display system summary', '  history      show command history',
+      '  date         print local date and time', '  uptime       print session uptime', '  social       show social links',
+      '  repo NAME    open a repository', '  theme        cycle display theme', '  exit         close session (visual only)'
+    ],
+    'command.about': ['HI, I AM VLADISLAV MOROZ', 'SOFTWARE ENGINEERING STUDENT AT SPBU', 'INTERESTED IN RUST AND SYSTEMS PROGRAMMING'],
+    'command.projectsEmpty': ['NO REPOSITORIES AVAILABLE.'],
+    'command.research': ['AREAS OF INTEREST:', '  SYSTEMS & LOW-LEVEL PROGRAMMING', '  COMPILERS & STATIC ANALYSIS', '  DATA DEDUPLICATION'],
+    'command.achievements': ['MARLINE :: POSTING-LIST INDEX / UPSTREAM PR ACCEPTED', 'RUST-ANALYZER :: E0121 DIAGNOSTIC / PR MERGED', 'CORRODE :: RUST + SQLITE + GITHUB API'],
+    'command.skills': ['PROGRAMMING  Rust, C', 'SYSTEMS      Linux, Bash, Docker', 'RUST TOOLS   Cargo, Tokio, async programming', 'DATA         PostgreSQL, Git'],
+    'command.github': ['OPENING HTTPS://GITHUB.COM/VLM326'],
+    'command.contact': ['EMAIL:    morozvv75@gmail.com', 'TELEGRAM: @VLM326', 'GITHUB:   github.com/VLM326'],
+    'command.whoami': ['vlm326'], 'command.pwd': ['/home/vlm326/portfolio'],
+    'command.ls': ['about.txt  projects/  research/  achievements.log  skills.txt  contact.txt'],
+    'command.cat': ['VLADISLAV MOROZ — SOFTWARE ENGINEERING STUDENT AT SPBU.', 'INTERESTED IN RUST, SYSTEMS PROGRAMMING, AND OPEN SOURCE.'],
+    'command.neofetch': ['        .--.       VLM326@portfolio', '       |o_o |      -----------------', '       |:_/ |      OS: {os}', '      //   \\\\     KERNEL: {kernel}', '     (|     | )    HOST: {hostname}', '     /\\_   _/\\     SHELL: zsh', '     \\___)=(___/    MEM: {mem}   UPTIME: {uptime}'],
+    'command.historyEmpty': ['NO COMMANDS IN HISTORY.'], 'command.repoMissing': 'REPOSITORY NOT FOUND: {name}',
+    'command.unknown': 'COMMAND NOT FOUND: {name}', 'command.unknownHint': "TYPE 'HELP' FOR AVAILABLE COMMANDS.",
+    'command.theme': ['DISPLAY: {theme} PHOSPHOR', 'SCANLINES: ENABLED', 'REFRESH: 60HZ', 'PROFILE: VT100 / CRT'],
+    'command.exit': ['SESSION CANNOT BE CLOSED FROM REMOTE TTY.', 'TYPE `help` TO CONTINUE.']
+  },
+  ru: {
+    'page.title': 'Владислав Мороз — Портфолио',
+    'boot.aria': 'Загрузка системы', 'boot.loading': 'ЗАГРУЗКА...', 'boot.complete': 'СИГНАЛ ЕСТЬ // СИСТЕМА ГОТОВА',
+    'topbar.site': 'ЛИЧНЫЙ САЙТ', 'topbar.online': 'В СЕТИ', 'topbar.legacy': 'СТАРАЯ ВЕРСИЯ',
+    'topbar.legacyFooter': 'СТАРАЯ ВЕРСИЯ ↗', 'topbar.brand': 'Портфолио Vlm326',
+    'language.toggleLabel': 'Переключить на английский',
+    'hero.eyebrow': '[ ОБО МНЕ / ПОЛЬЗОВАТЕЛЬ 326 ]', 'hero.role': 'СТУДЕНТ ПРОГРАММНОЙ ИНЖЕНЕРИИ <span>/</span> RUST <span>/</span> СИСТЕМЫ',
+    'hero.copy': 'ИЗУЧАЮ ПРОГРАММНУЮ ИНЖЕНЕРИЮ В СПбГУ. ИНТЕРЕСУЮСЬ RUST, СИСТЕМНЫМ И НИЗКОУРОВНЕВЫМ ПРОГРАММИРОВАНИЕМ.',
+    'hero.projects': '[ СМОТРЕТЬ ПРОЕКТЫ ]', 'hero.github': '[ GITHUB ↗ ]', 'hero.cv': '[ РЕЗЮМЕ ▾ ]',
+    'hero.cvRussian': 'РЕЗЮМЕ НА РУССКОМ ↗', 'hero.cvEnglish': 'РЕЗЮМЕ НА АНГЛИЙСКОМ ↗',
+    'stats.aria': 'Статистика GitHub', 'stats.title': 'GITHUB', 'stats.connection': 'СОЕДИНЕНИЕ',
+    'stats.repositories': 'РЕПОЗИТОРИИ', 'stats.followers': 'ПОДПИСЧИКИ', 'stats.gists': 'ПУБЛИЧНЫЕ GIST',
+    'stats.lastCheck': 'ПОСЛЕДНЯЯ ПРОВЕРКА', 'stats.apiCache': 'КЕШ API:',
+    'menu.aria': 'Навигация по терминалу', 'menu.title': 'НАВИГАЦИЯ', 'menu.about': 'ОБО МНЕ', 'menu.projects': 'ПРОЕКТЫ', 'menu.skills': 'НАВЫКИ',
+    'menu.activity': 'АКТИВНОСТЬ', 'menu.host': 'СЕРВЕР', 'menu.experience': 'ПРОЕКТЫ И ВКЛАД', 'menu.contact': 'КОНТАКТЫ', 'menu.terminal': 'ТЕРМИНАЛ',
+    'profile.title': '[01] ПРОФИЛЬ', 'profile.hostname': 'ИМЯ УЗЛА', 'profile.hostnameValue': 'портфолио',
+    'profile.user': 'ПОЛЬЗОВАТЕЛЬ', 'profile.shell': 'ОБОЛОЧКА', 'profile.os': 'ОС', 'profile.editor': 'РЕДАКТОР',
+    'profile.location': 'ГОРОД', 'profile.locationValue': 'Санкт-Петербург', 'profile.skills': 'НАВЫКИ / ИНСТРУМЕНТЫ',
+    'monitor.title': '[02] АКТИВНОСТЬ', 'monitor.githubActivity': 'АКТИВНОСТЬ GITHUB', 'monitor.lastCommit': 'ПОСЛЕДНИЙ PUSH',
+    'monitor.contributions': 'СОБЫТИЯ', 'monitor.uptime': 'ВРЕМЯ РАБОТЫ', 'monitor.remote': 'УДАЛЁННЫЙ УЗЕЛ: github.com/Vlm326',
+    'about.title': '[03] ОБО МНЕ.TXT',
+    'about.copy': 'Я ВЛАДИСЛАВ МОРОЗ, СТУДЕНТ ПРОГРАММНОЙ ИНЖЕНЕРИИ СПбГУ. ПИШУ НА RUST И УЧАСТВУЮ В КОМАНДНЫХ И OPEN-SOURCE ПРОЕКТАХ.',
+    'about.exploring': 'ОБЛАСТИ ИНТЕРЕСОВ:', 'about.topic1': 'СИСТЕМНОЕ И НИЗКОУРОВНЕВОЕ ПРОГРАММИРОВАНИЕ', 'about.topic2': 'КОМПИЛЯТОРЫ И СТАТИЧЕСКИЙ АНАЛИЗ',
+    'projects.title': '[04] ПРОЕКТЫ', 'projects.repositories': 'РЕПОЗИТОРИИ', 'projects.found': 'НАЙДЕНО',
+    'projects.sorting': 'Сортировка проектов',
+    'projects.sortStars': '[★ ЗВЁЗДЫ]', 'projects.sortUpdated': '[↻ ОБНОВЛЕНИЕ]', 'projects.openRepo': '[ ОТКРЫТЬ РЕПОЗИТОРИЙ ↗ ]',
+    'projects.descriptionFallback': 'ПУБЛИЧНЫЙ РЕПОЗИТОРИЙ / ИСХОДНЫЙ КОД НА GITHUB.',
+    'projects.localScript': 'RUST-СЕРВИС С ПЕСОЧНИЦЕЙ И ПРОВЕРКОЙ / ВЫПОЛНЕНИЕМ LUA-СКРИПТОВ.',
+    'projects.netAnalysis': 'ИНСТРУМЕНТЫ АНАЛИЗА ГРАФОВ: BFS, СИЛЬНО СВЯЗНЫЕ КОМПОНЕНТЫ И ИНДЕКСАЦИЯ ПО ОРИЕНТИРАМ.',
+    'projects.rusthon': 'ЯЗЫК В ДУХЕ PYTHON НА RUST: ЛЕКСЕР, ПАРСЕР, AST И ИНТЕРПРЕТАТОР.',
+    'activity.title': '[05] ЛЕНТА АКТИВНОСТИ', 'activity.feed': 'ЛЕНТА GITHUB',
+    'activity.waiting': 'ОЖИДАНИЕ ПУБЛИЧНЫХ СОБЫТИЙ...', 'activity.empty': 'НЕТ ПУБЛИЧНЫХ СОБЫТИЙ.',
+    'host.title': '[06] СИСТЕМА СЕРВЕРА', 'host.os': 'ОС', 'host.kernel': 'ЯДРО', 'host.hostname': 'ИМЯ УЗЛА',
+    'host.memory': 'ПАМЯТЬ', 'host.swap': 'SWAP', 'host.info': 'СВЕДЕНИЯ О СЕРВЕРЕ', 'host.memoryUsage': 'Использование памяти',
+    'experience.title': '[07] ИЗБРАННЫЕ ПРОЕКТЫ', 'experience.selected': 'ОСНОВНЫЕ РАБОТЫ', 'experience.contributor': '[ УЧАСТНИК ПРОЕКТА ]',
+    'experience.marline': 'РЕАЛИЗОВАЛ ИНДЕКС НА СПИСКАХ ПОЗИЦИЙ И ОПЕРАЦИИ СХОДСТВА ЖАККАРА; PR ПРИНЯТ В ОСНОВНОЙ ПРОЕКТ.',
+    'experience.merged': '[ PR ВМЕРЖЕН ]',
+    'experience.rustAnalyzer': 'ДОБАВИЛ ДИАГНОСТИКУ E0121 ДЛЯ НЕДОПУСТИМЫХ КОНТЕКСТОВ ВЫВОДА ТИПОВ И ТЕСТЫ.',
+    'experience.prDetails': '[ PR / ПОДРОБНОСТИ ↗ ]', 'experience.personalProject': '[ ЛИЧНЫЙ ПРОЕКТ ]',
+    'experience.corrode': 'ИНСТРУМЕНТ НА RUST: СОБИРАЕТ КОНТЕКСТ GITHUB PR, ЗАПУСКАЕТ РЕВЬЮ С ПОМОЩЬЮ LLM И ХРАНИТ СОСТОЯНИЕ В SQLITE.',
+    'experience.teamProject': '[ КОМАНДНЫЙ ПРОЕКТ ]',
+    'experience.localScript': 'РАЗРАБАТЫВАЛ RUST-СЕРВИС-ПЕСОЧНИЦУ И PIPELINE ПРОВЕРКИ БЕЗОПАСНОСТИ И ВЫПОЛНЕНИЯ LUA-КОДА.',
+    'experience.openRepo': '[ ОТКРЫТЬ РЕПОЗИТОРИЙ ↗ ]',
+    'contact.title': '[08] КОНТАКТЫ', 'contact.response': 'ОБЫЧНО ОТВЕЧАЮ: ~24 Ч', 'contact.telegram': 'TELEGRAM',
+    'contact.open': '[ ОТКРЫТЬ ↗ ]', 'contact.email': 'EMAIL // НАПРЯМУЮ', 'contact.writeMail': '[ НАПИСАТЬ ↗ ]',
+    'terminal.title': '[09] ТЕРМИНАЛ', 'terminal.helpHint': "ВВЕДИТЕ 'HELP', ЧТОБЫ УВИДЕТЬ КОМАНДЫ", 'terminal.welcome': 'ТЕРМИНАЛ VLM326 v1.0.26',
+    'terminal.ready': 'ТЕРМИНАЛ ГОТОВ.', 'terminal.helpPrompt': "ВВЕДИТЕ 'HELP', ЧТОБЫ УВИДЕТЬ СПИСОК КОМАНД.",
+    'terminal.prompt': 'VLM326@portfolio:~$', 'terminal.inputLabel': 'Команда терминала',
+    'footer.ready': 'СИСТЕМА ГОТОВА', 'footer.connected': 'СОЕДИНЕНИЕ УСТАНОВЛЕНО', 'footer.contact': 'КОНТАКТЫ ↗',
+    'status.syncing': 'СИНХРОНИЗАЦИЯ', 'status.publicFeed': 'ПУБЛИЧНАЯ ЛЕНТА', 'status.cold': 'НЕ ЗАГРУЖЕН', 'status.waiting': 'ОЖИДАНИЕ',
+    'status.linking': 'СОЕДИНЕНИЕ ...', 'status.linked': 'ПОДКЛЮЧЕНО', 'status.offline': 'НЕТ СВЯЗИ', 'status.offlineLocal': 'НЕТ СВЯЗИ / ЛОКАЛЬНЫЕ ДАННЫЕ',
+    'status.cachedLive': 'КЕШ / АКТУАЛЬНЫЕ ДАННЫЕ', 'status.active': 'АКТИВНО', 'status.quiet': 'НЕТ СОБЫТИЙ',
+    'status.eventsCount': 'СОБЫТИЙ: {count}',
+    'time.hoursAgo': '{value} Ч НАЗАД', 'time.daysAgo': '{value} Д НАЗАД',
+    'events.push': 'ОТПРАВИЛ ИЗМЕНЕНИЯ В', 'events.create': 'СОЗДАЛ', 'events.pullRequest': 'ОБНОВИЛ PULL REQUEST В',
+    'events.review': 'ПРОВЁЛ РЕВЬЮ PULL REQUEST В', 'events.issues': 'ОБНОВИЛ ISSUE В', 'events.comment': 'ОСТАВИЛ КОММЕНТАРИЙ В',
+    'events.watch': 'ДОБАВИЛ В ИЗБРАННОЕ', 'events.fork': 'СОЗДАЛ ФОРК', 'events.release': 'ОПУБЛИКОВАЛ РЕЛИЗ В',
+    'events.delete': 'УДАЛИЛ ДАННЫЕ ИЗ', 'events.public': 'СДЕЛАЛ ПУБЛИЧНЫМ', 'events.generic': 'АКТИВНОСТЬ В',
+    'command.help': [
+      'ДОСТУПНЫЕ КОМАНДЫ', '  help         список команд', '  about        обо мне', '  projects     список репозиториев',
+      '  research     области интересов', '  achievements избранные проекты', '  skills       навыки и инструменты',
+      '  github       открыть профиль GitHub', '  contact      контакты', '  clear        очистить вывод',
+      '  whoami       имя пользователя', '  pwd          текущий каталог', '  ls           список файлов',
+      '  cat          кратко обо мне', '  neofetch     сведения о системе', '  history      история команд',
+      '  date         дата и время', '  uptime       время с начала сессии', '  social       ссылки на профили',
+      '  repo NAME    открыть репозиторий', '  theme        сменить цветовую тему', '  exit         завершить сессию (только визуально)'
+    ],
+    'command.about': ['ПРИВЕТ, Я ВЛАДИСЛАВ МОРОЗ', 'СТУДЕНТ ПРОГРАММНОЙ ИНЖЕНЕРИИ СПбГУ', 'ИНТЕРЕСУЮСЬ RUST И СИСТЕМНЫМ ПРОГРАММИРОВАНИЕМ'],
+    'command.projectsEmpty': ['НЕТ ДОСТУПНЫХ РЕПОЗИТОРИЕВ.'],
+    'command.research': ['ОБЛАСТИ ИНТЕРЕСОВ:', '  СИСТЕМНОЕ И НИЗКОУРОВНЕВОЕ ПРОГРАММИРОВАНИЕ', '  КОМПИЛЯТОРЫ И СТАТИЧЕСКИЙ АНАЛИЗ', '  ДЕДУПЛИКАЦИЯ ДАННЫХ'],
+    'command.achievements': ['MARLINE :: ИНДЕКС НА СПИСКАХ ПОЗИЦИЙ / PR ПРИНЯТ', 'RUST-ANALYZER :: ДИАГНОСТИКА E0121 / PR ВМЕРЖЕН', 'CORRODE :: RUST + SQLITE + GITHUB API'],
+    'command.skills': ['ЯЗЫКИ       Rust, C', 'СИСТЕМЫ     Linux, Bash, Docker', 'ИНСТРУМЕНТЫ Cargo, Tokio, асинхронность', 'ДАННЫЕ      PostgreSQL, Git'],
+    'command.github': ['ОТКРЫВАЮ HTTPS://GITHUB.COM/VLM326'],
+    'command.contact': ['EMAIL:    morozvv75@gmail.com', 'TELEGRAM: @VLM326', 'GITHUB:   github.com/VLM326'],
+    'command.whoami': ['vlm326'], 'command.pwd': ['/home/vlm326/portfolio'],
+    'command.ls': ['about.txt  projects/  research/  achievements.log  skills.txt  contact.txt'],
+    'command.cat': ['ВЛАДИСЛАВ МОРОЗ — СТУДЕНТ ПРОГРАММНОЙ ИНЖЕНЕРИИ СПбГУ.', 'ИНТЕРЕСУЮСЬ RUST, СИСТЕМНЫМ ПРОГРАММИРОВАНИЕМ И OPEN SOURCE.'],
+    'command.neofetch': ['        .--.       VLM326@portfolio', '       |o_o |      -----------------', '       |:_/ |      ОС: {os}', '      //   \\\\     ЯДРО: {kernel}', '     (|     | )    УЗЕЛ: {hostname}', '     /\\_   _/\\     ОБОЛОЧКА: zsh', '     \\___)=(___/    ПАМЯТЬ: {mem}   ВРЕМЯ: {uptime}'],
+    'command.historyEmpty': ['ИСТОРИЯ КОМАНД ПУСТА.'], 'command.repoMissing': 'РЕПОЗИТОРИЙ НЕ НАЙДЕН: {name}',
+    'command.unknown': 'НЕИЗВЕСТНАЯ КОМАНДА: {name}', 'command.unknownHint': "ВВЕДИТЕ 'HELP', ЧТОБЫ УВИДЕТЬ СПИСОК КОМАНД.",
+    'command.theme': ['ЦВЕТ: {theme} PHOSPHOR', 'СТРОКИ РАЗВЁРТКИ: ВКЛ.', 'ЧАСТОТА: 60 ГЦ', 'ПРОФИЛЬ: VT100 / CRT'],
+    'command.exit': ['СЕАНС НЕЛЬЗЯ ЗАВЕРШИТЬ ИЗ УДАЛЁННОГО TTY.', 'ВВЕДИТЕ `help`, ЧТОБЫ ПРОДОЛЖИТЬ.']
+  }
+};
+
+function t(key, values = {}) {
+  const text = translations[currentLanguage]?.[key] ?? translations.en[key] ?? key;
+  const format = (value) => String(value).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
+  return Array.isArray(text) ? text.map(format) : format(text);
+}
+
+function applyLanguage(language, persist = true) {
+  currentLanguage = language === 'en' ? 'en' : 'ru';
+  document.documentElement.lang = currentLanguage;
+  document.title = t('page.title');
+  document.querySelectorAll('[data-i18n]').forEach((element) => {
+    element.textContent = t(element.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach((element) => {
+    element.innerHTML = t(element.dataset.i18nHtml);
+  });
+  document.querySelectorAll('[data-i18n-aria-label]').forEach((element) => {
+    element.setAttribute('aria-label', t(element.dataset.i18nAriaLabel));
+  });
+
+  const toggle = $('#languageToggle');
+  toggle.textContent = currentLanguage === 'ru' ? 'EN' : 'RU';
+  toggle.setAttribute('aria-label', t('language.toggleLabel'));
+  if (persist) localStorage.setItem('vlm326-language', currentLanguage);
+
+  if (github.user) renderGithub();
+  else renderProjects();
+  if (github.user) {
+    const eventCount = github.events?.length || 0;
+    $('#contributions').textContent = eventCount
+      ? t('status.eventsCount', { count: eventCount })
+      : t('status.publicFeed');
+    $('#monitorActivity').textContent = eventCount
+      ? t('status.active')
+      : t('status.quiet');
+    renderActivity();
+  }
+  updateGithubStatus();
+}
+
+function updateGithubStatus() {
+  const state = githubStatus === 'cachedLive'
+    ? t('status.cachedLive')
+    : githubStatus === 'offlineLocal'
+      ? t('status.offlineLocal')
+      : t('status.syncing');
+  $('#apiState').textContent = state;
+  $('#monitorCache').textContent = githubStatus === 'cachedLive'
+    ? t('status.cachedLive')
+    : githubStatus === 'offlineLocal' ? t('status.offline') : t('status.cold');
+}
 
 // ============================================================
 // TERMINAL COMMANDS
 // ============================================================
 const commands = {
-  help: () => [
-    'AVAILABLE COMMANDS',
-    '  about         print about information',
-    '  projects      list projects',
-    '  research      list research tree',
-    '  achievements  show experience',
-    '  skills        show language matrix',
-    '  github        open remote profile',
-    '  contact       show communication links',
-    '  clear         clear terminal buffer',
-    '  whoami        identify current user',
-    '  pwd           print working directory',
-    '  ls            list directory',
-    '  cat           read about.txt',
-    '  neofetch      display computer summary',
-    '  history       show command history',
-    '  date          print local time',
-    '  uptime        print session uptime',
-    '  social        show social handles',
-    '  repo NAME     open repository',
-    '  theme         display color theme',
-    '  exit          close session (visual only)'
-  ],
+  help: () => t('command.help'),
 
-  about: () => [
-    'HI, I AM VLADISLAV MOROZ',
-    'USER: VLM326',
-    'SPBU STUDENT',
-    'LEARNING RUST AND IMPROVING MY COMPUTER SCIENCE SKILLS'
-  ],
+  about: () => t('command.about'),
 
   projects: () => {
     if (!github.repos.length) {
-      return [
-        'LOCAL_SCRIPT  ::  RUST / PYTHON / LUA',
-        'NETANALYSIS   ::  RUST / GRAPHS',
-        'RUSTHON       ::  RUST / PARSERS'
-      ];
+      return t('command.projectsEmpty');
     }
     return sortRepos().slice(0, 6).map((repo) =>
-      `${repo.name.toUpperCase()}  ::  ${repo.language || 'MISC'}  ::  ${repo.stargazers_count || 0} STARS  ::  ${locEstimate(repo)} LOC EST.`
+      `${repo.name.toUpperCase()}  ::  ${repo.language || 'MISC'}  ::  ${repo.stargazers_count || 0} ★`
     );
   },
 
-  research: () => [
-    'papers/',
-    '├─ storage-deduplication.md',
-    'algorithms/',
-    'benchmarks/',
-    'notes/'
-  ],
+  research: () => t('command.research'),
 
-  achievements: () => [
-    'ICPC :: QUARTERFINAL STAGE / FIRST YEAR',
-    'RUST ANALYZER :: CONTRIBUTOR',
-    'SPBU SUMMER SCHOOL :: 3RD PLACE / MARLINE'
-  ],
+  achievements: () => t('command.achievements'),
 
-  skills: () => [
-    'RUST       ██████████ 95%',
-    'LINUX      █████████░ 90%',
-    'ALGORITHMS ████████░░ 85%',
-    'C          ███████░░░ 75%',
-    'PARSERS    ███████░░░ 75%'
-  ],
+  skills: () => t('command.skills'),
 
   github: () => {
     window.open('https://github.com/Vlm326', '_blank', 'noopener');
-    return ['OPENING HTTPS://GITHUB.COM/VLM326'];
+    return t('command.github');
   },
 
-  contact: () => [
-    'EMAIL:    morozvv75@gmail.com',
-    'TELEGRAM: @VLM326',
-    'GITHUB:   github.com/VLM326'
-  ],
+  contact: () => t('command.contact'),
 
-  whoami: () => ['vlm326'],
+  whoami: () => t('command.whoami'),
 
-  pwd: () => ['/home/vlm326/portfolio'],
+  pwd: () => t('command.pwd'),
 
-  ls: () => [
-    'about.txt  projects/  research/  achievements.log  skills.txt  contact.txt'
-  ],
+  ls: () => t('command.ls'),
 
-  cat: () => [
-    'I AM VLADISLAV MOROZ (VLM326), A SPBU STUDENT LEARNING RUST AND IMPROVING MY COMPUTER SCIENCE SKILLS.',
-    'SEE /research AND /achievements.log FOR MORE INFORMATION.'
-  ],
+  cat: () => t('command.cat'),
 
-  neofetch: () => [
-    '        .--.       VLM326@portfolio',
-    '       |o_o |      -----------------',
-    '       |:_/ |      OS: ' + (hostInfo.os || 'Fedora Linux'),
-    '      //   \\ \\     KERNEL: ' + (hostInfo.kernel || '6.x'),
-    '     (|     | )    HOST: ' + (hostInfo.hostname || 'portfolio'),
-    '     /\\_   _/\\     SHELL: zsh',
-    '     \\___)=(___/    MEM: ' + (hostInfo.mem || '--') + '   UPTIME: ' + uptime()
-  ],
+  neofetch: () => t('command.neofetch', {
+    os: hostInfo.os || 'Linux',
+    kernel: hostInfo.kernel || '--',
+    hostname: hostInfo.hostname || 'portfolio',
+    mem: hostInfo.mem || '--',
+    uptime: uptime()
+  }),
 
   history: () => {
-    return history.map((command, index) =>
+    return history.length ? history.map((command, index) =>
       ` ${String(index + 1).padStart(2, '0')}  ${command}`
-    );
+    ) : t('command.historyEmpty');
   },
 
-  date: () => [new Date().toString()],
+  date: () => [new Date().toLocaleString(currentLanguage === 'ru' ? 'ru-RU' : 'en-GB')],
 
   uptime: () => [uptime()],
 
-  social: () => [
-    'GITHUB   github.com/VLM326',
-    'TELEGRAM t.me/VLM326',
-    'MAIL     morozvv75@gmail.com'
-  ],
+  social: () => t('command.contact'),
 
   theme: (arg) => {
     const theme = arg && themes.includes(arg)
       ? arg
       : themes[(themes.indexOf(currentTheme()) + 1) % themes.length];
     applyTheme(theme);
-    return [
-      `DISPLAY: ${theme.toUpperCase()} PHOSPHOR`,
-      'SCANLINES: ENABLED',
-      'REFRESH: 60HZ',
-      'PROFILE: VT100 / CRT'
-    ];
+    return t('command.theme', { theme: theme.toUpperCase() });
   },
 
-  exit: () => [
-    'SESSION CANNOT BE CLOSED FROM REMOTE TTY.',
-    'TYPE `help` TO CONTINUE.'
-  ]
+  exit: () => t('command.exit')
 };
 
 // ============================================================
@@ -222,16 +376,12 @@ function escapeHtml(value) {
   }[char]));
 }
 
-function locEstimate(repo) {
-  return Math.max(1, Math.round((repo.loc_estimate || repo.size * 100 || 0) / 40));
-}
-
 function relativeTime(date) {
   if (!date) return '--';
   const hours = Math.max(1, Math.floor((Date.now() - new Date(date)) / 3600000));
   return hours < 24
-    ? `${hours}H AGO`
-    : `${Math.floor(hours / 24)}D AGO`;
+    ? t('time.hoursAgo', { value: hours })
+    : t('time.daysAgo', { value: Math.floor(hours / 24) });
 }
 
 function sortRepos() {
@@ -288,7 +438,7 @@ function runCommand(raw) {
       print([`OPENING ${repo.html_url}`], raw);
       window.open(repo.html_url, '_blank', 'noopener');
     } else {
-      print([`REPOSITORY NOT FOUND: ${argument}`], raw);
+      print([t('command.repoMissing', { name: argument })], raw);
     }
     return;
   }
@@ -297,8 +447,8 @@ function runCommand(raw) {
     print(commands[name](argument), raw);
   } else {
     print([
-      `command not found: ${name}`,
-      "type 'help' for available commands"
+      t('command.unknown', { name }),
+      t('command.unknownHint')
     ], raw);
   }
 }
@@ -369,6 +519,43 @@ document.querySelectorAll('.sort-button').forEach((button) => {
   });
 });
 
+$('#languageToggle').addEventListener('click', () => {
+  applyLanguage(currentLanguage === 'ru' ? 'en' : 'ru');
+});
+
+const cvDropdown = document.querySelector('.cv-dropdown');
+if (cvDropdown) {
+  const summary = cvDropdown.querySelector('summary');
+
+  cvDropdown.addEventListener('pointerenter', (event) => {
+    if (event.pointerType === 'mouse') cvDropdown.open = true;
+  });
+
+  cvDropdown.addEventListener('pointerleave', (event) => {
+    if (event.pointerType === 'mouse' && !cvDropdown.contains(document.activeElement)) {
+      cvDropdown.open = false;
+    }
+  });
+
+  cvDropdown.addEventListener('focusout', (event) => {
+    if (!cvDropdown.contains(event.relatedTarget) && !cvDropdown.matches(':hover')) {
+      cvDropdown.open = false;
+    }
+  });
+
+  summary.addEventListener('click', (event) => {
+    if (event.detail > 0 && cvDropdown.matches(':hover') && cvDropdown.open) {
+      event.preventDefault();
+    }
+  });
+
+  cvDropdown.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      cvDropdown.open = false;
+    });
+  });
+}
+
 // ============================================================
 // CLOCKS & UPTIME
 // ============================================================
@@ -393,6 +580,8 @@ async function fetchGithub() {
     const stored = JSON.parse(localStorage.getItem(cacheKey) || 'null');
     if (stored && Date.now() - stored.timestamp < 15 * 60 * 1000) {
       github = stored.data;
+      githubLastChecked = stored.timestamp;
+      githubStatus = 'cachedLive';
       renderGithub();
       fetchEvents();
       return;
@@ -415,9 +604,11 @@ async function fetchGithub() {
       ),
       events: []
     };
+    githubLastChecked = Date.now();
+    githubStatus = 'cachedLive';
 
     localStorage.setItem(cacheKey,
-      JSON.stringify({ timestamp: Date.now(), data: github })
+      JSON.stringify({ timestamp: githubLastChecked, data: github })
     );
     renderGithub();
     fetchEvents();
@@ -434,10 +625,13 @@ async function fetchGithub() {
         .then((r) => r.json())
     ]);
     github = { user, repos, events: [] };
+    githubLastChecked = Date.now();
+    githubStatus = 'cachedLive';
     renderGithub();
     fetchEvents();
   } catch {
-    $('#apiState').textContent = 'OFFLINE / LOCAL';
+    githubStatus = 'offlineLocal';
+    updateGithubStatus();
   }
 }
 
@@ -449,14 +643,15 @@ async function fetchEvents() {
     const response = await fetch('/api/events');
     github.events = response.ok ? await response.json() : [];
     $('#contributions').textContent = github.events.length
-      ? `${github.events.length} EVENTS`
-      : 'PUBLIC FEED';
+      ? t('status.eventsCount', { count: github.events.length })
+      : t('status.publicFeed');
     $('#monitorActivity').textContent = github.events.length
-      ? 'ACTIVE'
-      : 'QUIET';
+      ? t('status.active')
+      : t('status.quiet');
     renderActivity();
   } catch {
-    $('#contributions').textContent = 'PUBLIC FEED';
+    $('#contributions').textContent = t('status.publicFeed');
+    $('#activityFeed').innerHTML = `<p>${escapeHtml(t('activity.empty'))}</p>`;
   }
 }
 
@@ -470,10 +665,14 @@ function renderGithub() {
   $('#projectCount').textContent = github.repos.length;
   $('#followers').textContent = github.user.followers ?? '--';
   $('#gists').textContent = github.user.public_gists ?? '--';
-  $('#apiState').textContent = 'CACHED / LIVE';
+  githubStatus = 'cachedLive';
+  updateGithubStatus();
   $('#monitorRepos').textContent = github.user.public_repos ?? github.repos.length;
-  $('#monitorCache').textContent = 'CACHED / LIVE';
-  $('#monitorSync').textContent = new Date().toLocaleTimeString('en-GB');
+  $('#monitorSync').textContent = new Date(githubLastChecked || Date.now())
+    .toLocaleTimeString(currentLanguage === 'ru' ? 'ru-RU' : 'en-GB');
+  $('#lastSync').textContent = githubLastChecked
+    ? new Date(githubLastChecked).toLocaleTimeString(currentLanguage === 'ru' ? 'ru-RU' : 'en-GB')
+    : '--';
 
   const latest = [...github.repos]
     .sort((a, b) => new Date(b.pushed_at || 0) - new Date(a.pushed_at || 0))[0];
@@ -489,39 +688,47 @@ function renderProjects() {
   const grid = $('#projectGrid');
   if (!github.repos.length) return;
 
+  const curatedDescriptions = {
+    localscript: 'projects.localScript',
+    netanalysys: 'projects.netAnalysis',
+    rusthon: 'projects.rusthon'
+  };
+
   grid.innerHTML = sortRepos().slice(0, 6).map((repo) => `
     <article class="project-card">
       <div class="project-card__top">
         <span>${escapeHtml(repo.name.toUpperCase())}</span>
         <span class="live-value">${repo.stargazers_count || 0}★</span>
       </div>
-      <p>${escapeHtml(
-        (repo.description || 'PUBLIC REPOSITORY / SOURCE AVAILABLE ON GITHUB.').toUpperCase()
-      )}</p>
+      <p>${escapeHtml(t(curatedDescriptions[repo.name.toLowerCase()] || '') || repo.description || t('projects.descriptionFallback'))}</p>
       <div class="project-card__tags">
         ${escapeHtml(repo.language || 'MISC')} ·
-        ${repo.stargazers_count || 0} STARS ·
-        ${locEstimate(repo)} LOC EST.
+        ${repo.stargazers_count || 0} ★
       </div>
       <a href="${escapeHtml(repo.html_url)}" target="_blank" rel="noreferrer">
-        [ OPEN REPO ↗ ]
+        ${escapeHtml(t('projects.openRepo'))}
       </a>
     </article>
   `).join('');
 }
 
 function renderActivity() {
-  if (!github.events?.length) return;
+  if (!github.events?.length) {
+    if (github.user) $('#activityFeed').innerHTML = `<p>${escapeHtml(t('activity.empty'))}</p>`;
+    return;
+  }
+
+  const eventLabels = {
+    PushEvent: 'events.push', CreateEvent: 'events.create', PullRequestEvent: 'events.pullRequest',
+    PullRequestReviewEvent: 'events.review', IssuesEvent: 'events.issues', IssueCommentEvent: 'events.comment',
+    WatchEvent: 'events.watch', ForkEvent: 'events.fork', ReleaseEvent: 'events.release',
+    DeleteEvent: 'events.delete', PublicEvent: 'events.public'
+  };
 
   $('#activityFeed').innerHTML = github.events.slice(0, 4).map((event) => `
     <p>
       <time>[ ${relativeTime(event.created_at)} ]</time>
-      ${escapeHtml(
-        (event.type || 'EVENT')
-          .replace('Event', '')
-          .replace(/([A-Z])/g, ' $1')
-          .toUpperCase()
-      )}
+      ${escapeHtml(t(eventLabels[event.type] || 'events.generic'))}
       <b>${escapeHtml(event.repo?.name || 'GITHUB')}</b>
     </p>
   `).join('');
@@ -549,7 +756,7 @@ async function fetchSystemInfo() {
 
     hostInfo = {
       os: [info.os_name, info.os_version].filter(Boolean).join(' ') || 'Linux',
-      kernel: info.kernel_version || 'unknown',
+      kernel: info.kernel_version || '--',
       hostname: info.hostname || 'portfolio',
       mem: total ? `${formatBytes(used)} / ${formatBytes(total)}` : '--'
     };
@@ -563,12 +770,12 @@ async function fetchSystemInfo() {
 
     sync.classList.remove('dim');
     sync.classList.add('live-value');
-    sync.textContent = 'LINKED';
+    sync.textContent = t('status.linked');
   } catch {
     hostInfo = {};
     sync.classList.add('dim');
     sync.classList.remove('live-value');
-    sync.textContent = 'OFFLINE';
+    sync.textContent = t('status.offline');
     $('#hostOs').textContent = '--';
     $('#hostKernel').textContent = '--';
     $('#hostName').textContent = '--';
@@ -604,6 +811,8 @@ if (
 // ============================================================
 // INIT
 // ============================================================
+const savedLanguage = localStorage.getItem('vlm326-language');
+applyLanguage(savedLanguage === 'ru' ? 'ru' : 'en', false);
 renderProjects();
 fetchGithub();
 fetchSystemInfo();
@@ -615,7 +824,7 @@ applyTheme(currentTheme());
 // BOOT SEQUENCE
 // ============================================================
 setTimeout(() => {
-  $('#bootLine').textContent = 'SIGNAL LOCKED // SYSTEM READY';
+  $('#bootLine').textContent = t('boot.complete');
   setTimeout(() => {
     $('#boot').classList.add('is-hidden');
   }, 500);

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#020402">
-    <title>Vladislav Moroz</title>
+    <title>Vladislav Moroz — Portfolio</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
@@ -13,9 +14,9 @@
 </head>
 
 <body>
-    <div class="boot" id="boot" aria-label="System boot sequence">
+    <div class="boot" id="boot" aria-label="System boot sequence" data-i18n-aria-label="boot.aria">
         <div class="boot__logo">Vlm326</div>
-        <div class="boot__line" id="bootLine">LOADING...</div>
+        <div class="boot__line" id="bootLine" data-i18n="boot.loading">LOADING...</div>
         <div class="boot__bar"><span></span></div>
     </div>
 
@@ -26,19 +27,21 @@
             <header class="topbar terminal-box">
                 <div class="topbar__meta">
                     <span>VLM326</span>
-                    <span>PERSONAL SITE</span>
+                    <span data-i18n="topbar.site">PERSONAL SITE</span>
                 </div>
-                <div class="topbar__brand" aria-label="Vlm326 portfolio">Vlm326</div>
-                <div class="topbar__status"><i class="status-dot"></i> ONLINE <span class="hide-small">//</span> <span
+                <div class="topbar__brand" aria-label="Vlm326 portfolio" data-i18n-aria-label="topbar.brand">Vlm326</div>
+                <div class="topbar__status"><i class="status-dot"></i> <span data-i18n="topbar.online">ONLINE</span> <span class="hide-small">//</span> <span
                         class="clock-group"><b>SPB</b><span id="clock">00:00:00</span></span><span
                         class="clock-group hide-small"><b>UTC</b><span id="clockUtc">00:00:00</span></span><span
-                        class="clock-group hide-small"><b>TYO</b><span id="clockTokyo">00:00:00</span></span> <a
-                        class="legacy-link" href="legacy/">LEGACY VERSION</a></div>
+                        class="clock-group hide-small"><b>TYO</b><span id="clockTokyo">00:00:00</span></span>
+                    <button class="language-toggle" id="languageToggle" type="button" aria-label="Switch to Russian"
+                        data-i18n-aria-label="language.toggleLabel">RU</button>
+                    <a class="legacy-link" href="legacy/" data-i18n="topbar.legacy">LEGACY VERSION</a></div>
             </header>
 
             <section class="hero terminal-box" id="about">
                 <div class="hero__identity">
-                    <div class="eyebrow">[ ABOUT / USER 326 ]</div>
+                    <div class="eyebrow" data-i18n="hero.eyebrow">[ ABOUT / USER 326 ]</div>
                     <pre class="ascii-name" aria-label="VLM326">
  █████   █████ █████       ██████   ██████  ████████   ████████   ████████ 
 ▒▒███   ▒▒███ ▒▒███       ▒▒██████ ██████  ███▒▒▒▒███ ███▒▒▒▒███ ███▒▒▒▒███
@@ -51,108 +54,112 @@
                                                                            
                                                                            
                                                                            </pre>
-                    <p class="hero__role">STUDENT <span>/</span> RUST <span>/</span> LINUX</p>
-                    <p class="hero__copy">I STUDY COMPUTER SCIENCE AT SPBU AND WRITE SMALL PROGRAMS IN RUST.</p>
+                    <p class="hero__role" data-i18n-html="hero.role">STUDENT <span>/</span> RUST <span>/</span> LINUX</p>
+                    <p class="hero__copy" data-i18n="hero.copy">I STUDY COMPUTER SCIENCE AT SPBU AND WRITE SMALL PROGRAMS IN RUST.</p>
                     <div class="hero__actions">
-                        <a href="#projects" class="terminal-button">[ VIEW PROJECTS ]</a>
-                        <a href="Moroz_CV.pdf" class="terminal-button" target="_blank" rel="noopener">[ VIEW CV ↗ ]</a>
-                        <a href="https://github.com/Vlm326" target="_blank" rel="noreferrer"
+                        <a href="#projects" class="terminal-button" data-i18n="hero.projects">[ VIEW PROJECTS ]</a>
+                        <a href="https://github.com/Vlm326" target="_blank" rel="noreferrer" data-i18n="hero.github"
                             class="terminal-button terminal-button--quiet">[ GITHUB ↗ ]</a>
+                        <details class="cv-dropdown">
+                            <summary class="terminal-button" data-i18n="hero.cv">[ CV ▾ ]</summary>
+                            <div class="cv-dropdown__menu">
+                                <a href="Moroz_CV.pdf" target="_blank" rel="noopener" data-i18n="hero.cvRussian">RUSSIAN CV ↗</a>
+                                <a href="resume.pdf" target="_blank" rel="noopener" data-i18n="hero.cvEnglish">ENGLISH CV ↗</a>
+                            </div>
+                        </details>
                     </div>
                 </div>
-                <div class="stats" aria-label="GitHub statistics">
-                    <div class="panel-title">GITHUB</div>
+                <div class="stats" aria-label="GitHub statistics" data-i18n-aria-label="stats.aria">
+                    <div class="panel-title" data-i18n="stats.title">GITHUB</div>
                     <dl>
                         <div>
-                            <dt>CONNECTION</dt>
-                            <dd class="live-value">ONLINE</dd>
+                            <dt data-i18n="stats.connection">CONNECTION</dt>
+                            <dd class="live-value" data-i18n="topbar.online">ONLINE</dd>
                         </div>
                         <div>
-                            <dt>REPOSITORIES</dt>
+                            <dt data-i18n="stats.repositories">REPOSITORIES</dt>
                             <dd id="repoCount">--</dd>
                         </div>
                         <div>
-                            <dt>FOLLOWERS</dt>
+                            <dt data-i18n="stats.followers">FOLLOWERS</dt>
                             <dd id="followers">--</dd>
                         </div>
                         <div>
-                            <dt>PUBLIC GISTS</dt>
+                            <dt data-i18n="stats.gists">PUBLIC GISTS</dt>
                             <dd id="gists">--</dd>
                         </div>
                         <div>
-                            <dt>LAST SYNC</dt>
-                            <dd id="lastSync">03/08/2026</dd>
+                            <dt data-i18n="stats.lastCheck">LAST CHECK</dt>
+                            <dd id="lastSync">--</dd>
                         </div>
                     </dl>
-                    <div class="stats__footer"><span class="pulse"></span> API CACHE: <span
-                            id="apiState">CONNECTING</span></div>
+                    <div class="stats__footer"><span class="pulse"></span> <span data-i18n="stats.apiCache">API CACHE:</span> <span
+                            id="apiState" data-i18n="status.syncing">CONNECTING</span></div>
                 </div>
             </section>
 
-            <nav class="menu terminal-box" aria-label="Terminal navigation">
-                <div class="panel-title">COMMAND INDEX</div>
+            <nav class="menu terminal-box" aria-label="Terminal navigation" data-i18n-aria-label="menu.aria">
+                <div class="panel-title" data-i18n="menu.title">COMMAND INDEX</div>
                 <div class="menu__items">
-                    <a href="#about"><b>[1]</b> ABOUT</a>
-                    <a href="#projects"><b>[2]</b> PROJECTS</a>
-                    <a href="#skills"><b>[4]</b> SKILLS</a>
-                    <a href="#activity"><b>[5]</b> ACTIVITY</a>
-                    <a href="#hostSystem"><b>[6]</b> HOST</a>
-                    <a href="#achievements"><b>[7]</b> EXPERIENCE</a>
-                    <a href="#contact"><b>[8]</b> CONTACT</a>
-                    <a href="#terminal"><b>[9]</b> TERMINAL</a>
+                    <a href="#about"><b>[1]</b> <span data-i18n="menu.about">ABOUT</span></a>
+                    <a href="#projects"><b>[2]</b> <span data-i18n="menu.projects">PROJECTS</span></a>
+                    <a href="#skills"><b>[4]</b> <span data-i18n="menu.skills">SKILLS</span></a>
+                    <a href="#activity"><b>[5]</b> <span data-i18n="menu.activity">ACTIVITY</span></a>
+                    <a href="#hostSystem"><b>[6]</b> <span data-i18n="menu.host">HOST</span></a>
+                    <a href="#achievements"><b>[7]</b> <span data-i18n="menu.experience">EXPERIENCE</span></a>
+                    <a href="#contact"><b>[8]</b> <span data-i18n="menu.contact">CONTACT</span></a>
+                    <a href="#terminal"><b>[9]</b> <span data-i18n="menu.terminal">TERMINAL</span></a>
                 </div>
             </nav>
 
             <div class="dashboard-grid">
                 <section class="panel terminal-box" id="skills">
-                    <div class="panel-title">[01] ABOUT</div>
+                    <div class="panel-title" data-i18n="profile.title">[01] PROFILE</div>
                     <div class="key-value">
-                        <p><span>HOSTNAME</span> portfolio</p>
-                        <p><span>USER</span> VLM326</p>
-                        <p><span>SHELL</span> zsh</p>
-                        <p><span>OS</span> Fedora Linux</p>
-                        <p><span>EDITOR</span> VS Code</p>
-                        <p><span>LOCATION</span> Saint Petersburg</p>
+                        <p><span data-i18n="profile.hostname">HOSTNAME</span> <span class="key-value__value" data-i18n="profile.hostnameValue">portfolio</span></p>
+                        <p><span data-i18n="profile.user">USER</span> VLM326</p>
+                        <p><span data-i18n="profile.shell">SHELL</span> zsh</p>
+                        <p><span data-i18n="profile.os">OS</span> Fedora Linux</p>
+                        <p><span data-i18n="profile.editor">EDITOR</span> VS Code</p>
+                        <p><span data-i18n="profile.location">LOCATION</span> <span class="key-value__value" data-i18n="profile.locationValue">Saint Petersburg</span></p>
                     </div>
-                    <div class="subheading">LANGUAGES / TOOLS</div>
+                    <div class="subheading" data-i18n="profile.skills">LANGUAGES / TOOLS</div>
                     <div class="skill-list">
-                        <span>RUST</span><span>C</span><span>GO</span><span>PYTHON</span><span>KOTLIN</span><span>OCAML</span><span>SQL</span><span>VIBE
-                            CODING</span>
+                        <span>RUST</span><span>C</span><span>GIT</span><span>LINUX</span><span>BASH</span><span>DOCKER</span><span>POSTGRESQL</span><span>CARGO</span><span>TOKIO</span><span>ASYNC</span>
                     </div>
                 </section>
 
-                <section class="panel monitor terminal-box" aria-label="Activity">
-                    <div class="panel-title">[02] ACTIVITY</div>
+                <section class="panel monitor terminal-box" aria-label="Activity" data-i18n-aria-label="monitor.title">
+                    <div class="panel-title" data-i18n="monitor.title">[02] ACTIVITY</div>
                     <div class="monitor-grid">
-                        <div><span>GITHUB ACTIVITY</span><b id="monitorActivity">SYNCING</b></div>
-                        <div><span>LAST COMMIT</span><b id="lastCommit">--</b></div>
-                        <div><span>CONTRIBUTIONS</span><b id="contributions">PUBLIC FEED</b></div>
-                        <div><span>REPOSITORIES</span><b id="monitorRepos">--</b></div>
-                        <div><span>API CACHE</span><b id="monitorCache">COLD</b></div>
-                        <div><span>UPTIME</span><b id="uptime">000:00:00:00</b></div>
+                        <div><span data-i18n="monitor.githubActivity">GITHUB ACTIVITY</span><b id="monitorActivity" data-i18n="status.syncing">SYNCING</b></div>
+                        <div><span data-i18n="monitor.lastCommit">LAST COMMIT</span><b id="lastCommit">--</b></div>
+                        <div><span data-i18n="monitor.contributions">CONTRIBUTIONS</span><b id="contributions" data-i18n="status.publicFeed">PUBLIC FEED</b></div>
+                        <div><span data-i18n="stats.repositories">REPOSITORIES</span><b id="monitorRepos">--</b></div>
+                        <div><span data-i18n="stats.apiCache">API CACHE</span><b id="monitorCache" data-i18n="status.cold">COLD</b></div>
+                        <div><span data-i18n="monitor.uptime">UPTIME</span><b id="uptime">000:00:00:00</b></div>
                     </div>
-                    <div class="monitor__readout"><span>REMOTE: github.com/Vlm326</span><strong
-                            id="monitorSync">WAITING</strong></div>
+                    <div class="monitor__readout"><span data-i18n="monitor.remote">REMOTE: github.com/Vlm326</span><strong
+                            id="monitorSync" data-i18n="status.waiting">WAITING</strong></div>
                 </section>
 
                 <section class="panel terminal-box about-panel">
-                    <div class="panel-title">[03] ABOUT.TXT</div>
-                    <p>I AM VLADISLAV MOROZ, A STUDENT AT SPBU. I AM LEARNING RUST AND IMPROVING MY COMPUTER SCIENCE
-                        SKILLS.</p>
-                    <p class="dim">CURRENTLY EXPLORING:</p>
+                    <div class="panel-title" data-i18n="about.title">[03] ABOUT.TXT</div>
+                    <p data-i18n="about.copy">I AM VLADISLAV MOROZ, A STUDENT AT SPBU. I AM LEARNING RUST AND IMPROVING MY COMPUTER SCIENCE SKILLS.</p>
+                    <p class="dim" data-i18n="about.exploring">CURRENTLY EXPLORING:</p>
                     <ul class="prompt-list">
-                        <li>FILE SYSTEMS &amp; DEDUPLICATION</li>
-                        <li>COMPILER CONSTRUCTION</li>
+                        <li data-i18n="about.topic1">FILE SYSTEMS &amp; DEDUPLICATION</li>
+                        <li data-i18n="about.topic2">COMPILER CONSTRUCTION</li>
                     </ul>
                 </section>
             </div>
 
             <section class="section-block terminal-box" id="projects">
-                <div class="section-heading"><span>[04] PROJECTS</span><span class="dim">REPOSITORIES // <span
-                            id="projectCount">--</span> FOUND</span></div>
-                <div class="registry-controls" role="group" aria-label="Project sorting"><button
-                        class="sort-button is-active" data-sort="stars">[★ STARS]</button><button class="sort-button"
-                        data-sort="updated">[↻ UPDATED]</button></div>
+                <div class="section-heading"><span data-i18n="projects.title">[04] PROJECTS</span><span class="dim"><span data-i18n="projects.repositories">REPOSITORIES</span> // <span
+                            id="projectCount">--</span> <span data-i18n="projects.found">FOUND</span></span></div>
+                <div class="registry-controls" role="group" aria-label="Project sorting" data-i18n-aria-label="projects.sorting"><button
+                        class="sort-button is-active" data-sort="stars" data-i18n="projects.sortStars">[★ STARS]</button><button class="sort-button"
+                        data-sort="updated" data-i18n="projects.sortUpdated">[↻ UPDATED]</button></div>
                 <div class="project-grid" id="projectGrid">
                     <article class="project-card">
                         <div class="project-card__top"><span>LOCAL_SCRIPT</span><span class="live-value">ACTIVE</span>
@@ -183,100 +190,92 @@
 
             <div class="lower-grid">
                 <section class="section-block terminal-box" id="activity">
-                    <div class="section-heading"><span>[05] ACTIVITY LOG</span><span class="dim">GITHUB FEED</span>
+                    <div class="section-heading"><span data-i18n="activity.title">[05] ACTIVITY LOG</span><span class="dim" data-i18n="activity.feed">GITHUB FEED</span>
                     </div>
                     <div class="activity" id="activityFeed">
-                        <p><time>[ 2h ]</time> PUSHED TO <b>MARLINE</b></p>
-                        <p><time>[ 5h ]</time> UPDATED <b>README.MD</b></p>
-                        <p><time>[ 1d ]</time> CREATED NEW REPOSITORY</p>
-                        <p><time>[ 3d ]</time> MERGED PULL REQUEST</p>
+                        <p data-i18n="activity.waiting">WAITING FOR PUBLIC EVENTS...</p>
                     </div>
                 </section>
                 <section class="section-block terminal-box" id="hostSystem">
-                    <div class="section-heading"><span>[06] HOST SYSTEM</span><span class="dim" id="hostSync">LINKING
-                        ...</span></div>
+                    <div class="section-heading"><span data-i18n="host.title">[06] HOST SYSTEM</span><span class="dim" id="hostSync" data-i18n="status.linking">LINKING ...</span></div>
                     <div class="key-value">
-                        <p><span>OS</span><b id="hostOs">--</b></p>
-                        <p><span>KERNEL</span><b id="hostKernel">--</b></p>
-                        <p><span>HOSTNAME</span><b id="hostName">--</b></p>
-                        <p><span>MEMORY</span><b id="hostMem">--</b></p>
-                        <p><span>SWAP</span><b id="hostSwap">--</b></p>
+                        <p><span data-i18n="host.os">OS</span><b id="hostOs">--</b></p>
+                        <p><span data-i18n="host.kernel">KERNEL</span><b id="hostKernel">--</b></p>
+                        <p><span data-i18n="host.hostname">HOSTNAME</span><b id="hostName">--</b></p>
+                        <p><span data-i18n="host.memory">MEMORY</span><b id="hostMem">--</b></p>
+                        <p><span data-i18n="host.swap">SWAP</span><b id="hostSwap">--</b></p>
                     </div>
-                    <div class="mem-bar" aria-label="Memory usage"><span id="memBar" style="width:0%"></span></div>
-                    <div class="subheading">HOST INFO</div>
+                    <div class="mem-bar" aria-label="Memory usage" data-i18n-aria-label="host.memoryUsage"><span id="memBar" style="width:0%"></span></div>
+                    <div class="subheading" data-i18n="host.info">HOST INFO</div>
                 </section>
                 <section class="section-block terminal-box achievements" id="achievements">
-                    <div class="section-heading"><span>[07] EXPERIENCE</span><span class="dim">SELECTED ITEMS</span>
+                    <div class="section-heading"><span data-i18n="experience.title">[07] SELECTED WORK</span><span class="dim" data-i18n="experience.selected">SELECTED ITEMS</span>
                     </div>
                     <div class="achievement-list">
                         <article>
-                            <div class="achievement-title"><span>ICPC</span><span class="live-value">[ PARTICIPANT ]</span>
+                            <div class="achievement-title"><span>MARLINE</span><span class="live-value" data-i18n="experience.contributor">[ CONTRIBUTOR ]</span>
                             </div>
-                            <p>PARTICIPANT. REACHED THE ICPC QUARTERFINAL STAGE DURING FIRST YEAR.</p>
+                            <p data-i18n="experience.marline">CONTRIBUTED AN IN-MEMORY POSTING-LIST INDEX AND JACCARD SIMILARITY OPERATIONS; THE PR WAS ACCEPTED UPSTREAM.</p>
+                            <a href="https://github.com/admitrievtsev/marline/pull/2" target="_blank" rel="noreferrer" data-i18n="experience.prDetails">[ PR / DETAILS ↗ ]</a>
                         </article>
                         <article>
-                            <div class="achievement-title"><span>RUST ANALYZER</span><span class="live-value">[ CONTRIBUTOR
-                                    ]</span></div>
-                            <p>CONTRIBUTOR TO THE RUST TOOLING ECOSYSTEM.</p><a
-                                href="https://github.com/rust-lang/rust-analyzer/pulls?q=is%3Apr+author%3AVlm326"
-                                target="_blank" rel="noreferrer">[ PR / DETAILS ↗ ]</a>
+                            <div class="achievement-title"><span>RUST-ANALYZER</span><span class="live-value" data-i18n="experience.merged">[ MERGED PR ]</span></div>
+                            <p data-i18n="experience.rustAnalyzer">ADDED E0121 DIAGNOSTICS FOR TYPE-INFERENCE PLACEHOLDERS IN UNSUPPORTED CONTEXTS, WITH TESTS.</p><a
+                                href="https://github.com/rust-lang/rust-analyzer/pull/22469"
+                                target="_blank" rel="noreferrer" data-i18n="experience.prDetails">[ PR / DETAILS ↗ ]</a>
                         </article>
                         <article>
-                            <div class="achievement-title"><span>SPBU SUMMER SCHOOL</span><span class="live-value">[ 3RD
-                                    PLACE ]</span></div>
-                            <p>DEDUPLICATION PROJECT: MARLINE. SUMMER PROGRAMMING SCHOOL, SPBU.</p><a
-                                href="https://github.com/admitrievtsev/marline/pull/2" target="_blank"
-                                rel="noreferrer">[ OPEN PR ↗ ]</a>
+                            <div class="achievement-title"><span>CORRODE</span><span class="live-value" data-i18n="experience.personalProject">[ PERSONAL PROJECT ]</span></div>
+                            <p data-i18n="experience.corrode">A RUST TOOL THAT COLLECTS GITHUB PR CONTEXT, RUNS LLM-ASSISTED REVIEWS, AND STORES REVIEW STATE IN SQLITE.</p><a
+                                href="https://github.com/Vlm326/Corrode" target="_blank" rel="noreferrer" data-i18n="experience.openRepo">[ OPEN REPO ↗ ]</a>
                         </article>
                         <article>
-                            <div class="achievement-title"><span>LOCAL SCRIPT</span><span
-                                    class="live-value">[ HACKATHON ]</span></div>
-                            <p>HACKATHON PARTICIPATION. APP DEVELOPED FOR MWS/OCTAPI: SCRIPT EXECUTION WITH AST
-                                ANALYSIS AND SANDBOXING.</p><a href="https://github.com/Vlm326/LocalScript"
-                                target="_blank" rel="noreferrer">[ OPEN REPO ↗ ]</a>
+                            <div class="achievement-title"><span>LOCALSCRIPT</span><span class="live-value" data-i18n="experience.teamProject">[ TEAM PROJECT ]</span></div>
+                            <p data-i18n="experience.localScript">BUILT PART OF A RUST SANDBOX SERVICE AND THE PIPELINE FOR LUA SYNTAX / SAFETY CHECKS AND EXECUTION.</p><a
+                                href="https://github.com/Vlm326/LocalScript" target="_blank"
+                                rel="noreferrer" data-i18n="experience.openRepo">[ OPEN REPO ↗ ]</a>
                         </article>
                     </div>
                 </section>
             </div>
 
             <section class="section-block terminal-box" id="contact">
-                    <div class="section-heading"><span>[08] CONTACT</span><span class="dim">RESPONSE TIME
+                    <div class="section-heading"><span data-i18n="contact.title">[08] CONTACT</span><span class="dim" data-i18n="contact.response">RESPONSE TIME
                         ~24H</span></div>
                 <div class="contact-grid">
                     <a class="contact-card contact-card--primary" href="https://t.me/VLM326" target="_blank"
                         rel="noreferrer">
-                        <span class="contact-card__label">TELEGRAM</span>
+                        <span class="contact-card__label" data-i18n="contact.telegram">TELEGRAM</span>
                         <span class="contact-card__value">@VLM326</span>
-                        <span class="contact-card__link">[ OPEN ↗ ]</span>
+                        <span class="contact-card__link" data-i18n="contact.open">[ OPEN ↗ ]</span>
                     </a>
                     <a class="contact-card" href="mailto:morozvv75@gmail.com">
-                        <span class="contact-card__label">EMAIL // DIRECT</span>
+                        <span class="contact-card__label" data-i18n="contact.email">EMAIL // DIRECT</span>
                         <span class="contact-card__value">morozvv75@gmail.com</span>
-                        <span class="contact-card__link">[ WRITE MAIL ↗ ]</span>
+                        <span class="contact-card__link" data-i18n="contact.writeMail">[ WRITE MAIL ↗ ]</span>
                     </a>
                 </div>
             </section>
 
             <section class="terminal-window terminal-box" id="terminal">
-                <div class="terminal-window__bar"><span>[09] TERMINAL</span><span class="dim">type 'help' for
-                        commands</span></div>
+                <div class="terminal-window__bar"><span data-i18n="terminal.title">[09] TERMINAL</span><span class="dim" data-i18n="terminal.helpHint">type 'help' for commands</span></div>
                 <div class="terminal-output" id="terminalOutput" aria-live="polite">
-                    <p>VLM326 TERMINAL v1.0.26</p>
-                    <p>TERMINAL READY.</p>
-                    <p class="dim">type 'help' to list available commands.</p>
+                    <p data-i18n="terminal.welcome">VLM326 TERMINAL v1.0.26</p>
+                    <p data-i18n="terminal.ready">TERMINAL READY.</p>
+                    <p class="dim" data-i18n="terminal.helpPrompt">type 'help' to list available commands.</p>
                 </div>
                 <form class="terminal-input" id="terminalForm"><label
-                        for="commandInput">VLM326@portfolio:~$</label><input id="commandInput" autocomplete="off"
-                        spellcheck="false" aria-label="Terminal command"><span class="fake-cursor"
+                        for="commandInput" data-i18n="terminal.prompt">VLM326@portfolio:~$</label><input id="commandInput" autocomplete="off"
+                        spellcheck="false" aria-label="Terminal command" data-i18n-aria-label="terminal.inputLabel"><span class="fake-cursor"
                         aria-hidden="true"></span></form>
             </section>
 
             <footer class="footer terminal-box">
-                <div><strong>SYSTEM READY</strong><span>CONNECTED</span><span>UPTIME <b
+                <div><strong data-i18n="footer.ready">SYSTEM READY</strong><span data-i18n="footer.connected">CONNECTED</span><span><span data-i18n="monitor.uptime">UPTIME</span> <b
                             id="footerUptime">000:00:00</b></span></div>
-                <div><span>VLM326 // BUILD 2026.08</span><a href="mailto:morozvv75@gmail.com">CONTACT ↗</a><a
+                <div><span>VLM326 // BUILD 2026.08</span><a href="mailto:morozvv75@gmail.com" data-i18n="footer.contact">CONTACT ↗</a><a
                         href="https://github.com/Vlm326" target="_blank" rel="noreferrer">GITHUB ↗</a><a
-                        href="legacy/">LEGACY VERSION ↗</a></div>
+                        href="legacy/" data-i18n="topbar.legacyFooter">LEGACY VERSION ↗</a></div>
             </footer>
         </div>
     </main>
