@@ -4,7 +4,7 @@
     --green: #00ff66;
     --green-2: #00dd55;
     --line: #009944;
-    --dim: #32945e;
+    --dim: #75ac88;
     --glow: rgba(0, 255, 120, .25);
     font-family: "Share Tech Mono", ui-monospace, monospace;
     color: var(--green)
@@ -43,16 +43,15 @@ input {
     z-index: 20;
     inset: 0;
     background: #000;
-    display: grid;
+    display: none;
     place-content: center;
     padding: 24px;
     color: var(--green);
     transition: opacity .7s, visibility .7s
 }
 
-.boot.is-hidden {
-    opacity: 0;
-    visibility: hidden
+html.boot-pending .boot {
+    display: grid;
 }
 
 .boot__logo {
@@ -79,7 +78,7 @@ input {
     height: 100%;
     background: var(--green);
     width: 0;
-    animation: bootbar 2.1s steps(10) forwards
+    animation: bootbar 1.2s steps(10) forwards
 }
 
 .crt-shell {
@@ -250,6 +249,14 @@ input {
 .hero__role {
     font-size: 15px;
     letter-spacing: .12em
+}
+
+.hero__name {
+    margin: 10px 0;
+    color: var(--green);
+    font: clamp(25px, 2.4vw, 36px)/1.1 VT323, monospace;
+    letter-spacing: .04em;
+    text-shadow: 0 0 6px var(--glow)
 }
 
 .hero__role span {
@@ -530,9 +537,25 @@ progress::-webkit-progress-value {
 
 .section-heading {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid #126c38;
     padding-bottom: 10px
+}
+
+.section-heading h2 {
+    font: inherit
+}
+
+.section-heading h2,
+.panel-title {
+    margin: 0;
+    font-weight: normal
+}
+
+.terminal-window__bar h2 {
+    margin: 0;
+    font: inherit
 }
 
 .project-grid {
@@ -559,6 +582,12 @@ progress::-webkit-progress-value {
     display: flex;
     justify-content: space-between;
     font-size: 13px
+}
+
+.project-card__top h3,
+.achievement-title h3 {
+    margin: 0;
+    font: inherit
 }
 
 .project-card p {
@@ -1163,6 +1192,10 @@ progress::-webkit-progress-value {
         line-height: 1.8
     }
 
+    .hero__name {
+        font-size: clamp(22px, 6vw, 30px)
+    }
+
     .hero__role span {
         margin: 0 2px
     }
@@ -1378,5 +1411,276 @@ progress::-webkit-progress-value {
         flex-basis: 100%;
         margin: 5px 0 0;
         min-height: 24px
+    }
+}
+
+
+/* Reading and project exploration retain the terminal palette. */
+.hero__copy,
+.about-panel p,
+.project-card p,
+.achievement-list p,
+.section-intro {
+    font-size: 14px;
+    line-height: 1.75;
+    letter-spacing: .01em;
+    text-transform: none;
+}
+
+.hero__copy,
+.section-intro {
+    max-width: 70ch;
+}
+
+.section-intro {
+    color: var(--dim);
+    margin: 16px 0;
+}
+
+.prompt-list {
+    font-size: 13px;
+    line-height: 1.8;
+    letter-spacing: .01em;
+}
+
+.project-card {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card__top h3,
+.achievement-title h3 {
+    overflow-wrap: anywhere;
+}
+
+.project-card__actions {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+}
+
+.project-details {
+    background: transparent;
+    border: 0;
+    color: var(--green);
+    cursor: pointer;
+    padding: 8px 0;
+    font: inherit;
+    font-size: 12px;
+    text-align: left;
+}
+
+.project-card--interactive {
+    position: relative;
+}
+
+.project-card--interactive .project-details::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.project-card__actions a {
+    position: relative;
+    z-index: 1;
+    padding: 8px 0;
+}
+
+.project-card:focus-within {
+    border-color: var(--green);
+}
+
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 4px;
+}
+
+.project-card--interactive .project-details:focus-visible::after {
+    outline: 2px solid var(--green);
+    outline-offset: 3px;
+}
+
+.repository-catalog {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+}
+
+.repository-catalog > summary {
+    cursor: pointer;
+    color: var(--green-2);
+    width: fit-content;
+    padding: 8px 0;
+    font-size: 13px;
+}
+
+.achievement-list .project-details {
+    display: block;
+    margin-top: 8px;
+}
+
+.achievement-title {
+    flex-wrap: wrap;
+}
+
+.boot__skip {
+    margin-top: 24px;
+    justify-self: center;
+    background: transparent;
+    cursor: pointer;
+}
+
+.effects-toggle {
+    cursor: pointer;
+    background: transparent;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.topbar__status {
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.hero__actions {
+    flex-wrap: wrap;
+}
+
+.project-dialog {
+    width: min(680px, calc(100% - 32px));
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;
+    padding: 26px;
+    background: var(--screen);
+    color: var(--green);
+    border: 1px solid var(--line);
+    box-shadow: 0 0 32px var(--glow);
+    scrollbar-color: var(--line) var(--bg);
+}
+
+.project-dialog::backdrop {
+    background: rgba(0, 0, 0, .8);
+}
+
+html:has(.project-dialog[open]) {
+    overflow: hidden;
+}
+
+.project-dialog__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.project-dialog__header button {
+    background: transparent;
+    cursor: pointer;
+}
+
+.project-dialog h2 {
+    margin: 24px 0 10px;
+    font-size: 25px;
+    overflow-wrap: anywhere;
+}
+
+.project-dialog__body {
+    margin: 24px 0;
+}
+
+.project-dialog__body h3 {
+    font-size: 13px;
+    font-weight: normal;
+    color: var(--green-2);
+    margin: 24px 0 8px;
+}
+
+.project-dialog__body p {
+    color: var(--dim);
+    font-size: 15px;
+    line-height: 1.8;
+    letter-spacing: .01em;
+    margin: 0 0 16px;
+}
+
+/* This preference covers motion, scanlines, glare, and hover movement. */
+html.effects-off {
+    scroll-behavior: auto;
+}
+
+html.effects-off *,
+html.effects-off *::before,
+html.effects-off *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+}
+
+html.effects-off .crt-shell__glass,
+html.effects-off .crt-shell__noise {
+    display: none;
+}
+
+html.effects-off .reveal {
+    opacity: 1;
+    transform: none;
+}
+
+html.effects-off .project-card:hover,
+html.effects-off .contact-card:hover,
+html.effects-off .contact-card:focus {
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .crt-shell__glass,
+    .crt-shell__noise {
+        display: none;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+    }
+
+    .project-card:hover,
+    .contact-card:hover,
+    .contact-card:focus {
+        transform: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-dialog {
+        padding: 18px;
+    }
+
+    .project-dialog__header {
+        flex-wrap: wrap;
+    }
+}
+
+.theme-amber .project-dialog {
+    filter: hue-rotate(-95deg) saturate(1.15);
+}
+
+.theme-white .project-dialog {
+    filter: grayscale(1) brightness(1.35) contrast(.95);
+}
+
+.catalog-count {
+    font-size: 11px;
+}
+
+
+@media (min-width: 851px) {
+    #projectGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }

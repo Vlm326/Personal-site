@@ -8,8 +8,10 @@ mod system_info_utils;
 
 use axum::{
     Json, Router,
-    extract::State,
+    extract::{Request, State},
     http::{HeaderMap, HeaderValue, StatusCode},
+    middleware::{self, Next},
+    response::{IntoResponse, Redirect, Response},
     routing::get,
 };
 use reqwest::header::AUTHORIZATION;
@@ -79,13 +81,36 @@ async fn main() {
         .route("/api/languages_by_LOC", get(programming_languages_by_loc))
         .route("/api/system_info", get(get_system_info_endpoint))
         .fallback_service(ServeDir::new(frontend_dir))
+        .layer(middleware::from_fn(canonical_host_redirect))
         .with_state(state);
 
     println!("Server is running on http://localhost:3000");
-    let listener = tokio::net::TcpListener::bind(config.server.host + ":" + &config.server.port.to_string())
-        .await
-        .unwrap();
+    let listener =
+        tokio::net::TcpListener::bind(config.server.host + ":" + &config.server.port.to_string())
+            .await
+            .unwrap();
     axum::serve(listener, app).await.unwrap();
+}
+
+async fn canonical_host_redirect(request: Request, next: Next) -> Response {
+    let host = request
+        .headers()
+        .get("x-forwarded-host")
+        .or_else(|| request.headers().get(axum::http::header::HOST))
+        .and_then(|value| value.to_str().ok())
+        .unwrap_or_default();
+    let hostname = host.split(':').next().unwrap_or_default();
+
+    if hostname.eq_ignore_ascii_case("www.vlm326.ru") {
+        let path_and_query = request
+            .uri()
+            .path_and_query()
+            .map(|value| value.as_str())
+            .unwrap_or("/");
+        return Redirect::permanent(&format!("https://vlm326.ru{path_and_query}")).into_response();
+    }
+
+    next.run(request).await
 }
 
 async fn fetch_json(client: &reqwest::Client, url: &str) -> Result<serde_json::Value, ()> {
@@ -109,7 +134,8 @@ async fn refresh_github(client: &reqwest::Client, cache: &GitHubCache) {
     if let Ok(data) = fetch_json(client, "https://api.github.com/users/Vlm326/repos").await {
         snapshot.repos = data;
     }
-    if let Ok(data) = fetch_json(client, "https://api.github.com/users/Vlm326/events/public").await {
+    if let Ok(data) = fetch_json(client, "https://api.github.com/users/Vlm326/events/public").await
+    {
         snapshot.events = data;
     }
 }

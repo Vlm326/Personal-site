@@ -2,6 +2,14 @@
 // HELPERS
 // ============================================================
 const $ = (selector) => document.querySelector(selector);
+const preferences = {
+  getItem(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
+  },
+  setItem(key, value) {
+    try { localStorage.setItem(key, value); } catch { /* Preferences are optional. */ }
+  }
+};
 
 // ============================================================
 // STATE
@@ -18,7 +26,7 @@ const fallbackRepos = [
     size: 420,
     pushed_at: '2026-06-01',
     html_url: 'https://github.com/Vlm326/LocalScript',
-    description: 'SCRIPT EXECUTION WITH AST ANALYSIS AND SANDBOXING.'
+    description: 'Lua script validation and execution through a Rust sandbox service.'
   },
   {
     name: 'NetAnalysys',
@@ -27,7 +35,7 @@ const fallbackRepos = [
     size: 510,
     pushed_at: '2026-05-15',
     html_url: 'https://github.com/Vlm326/NetAnalysys',
-    description: 'GRAPH ANALYSIS WITH BFS, SCC, AND LANDMARK INDEXING.'
+    description: 'Graph analysis with BFS, strongly connected components, and landmark indexing.'
   },
   {
     name: 'Rusthon',
@@ -36,7 +44,7 @@ const fallbackRepos = [
     size: 300,
     pushed_at: '2026-04-20',
     html_url: 'https://github.com/Vlm326/Rusthon',
-    description: 'PYTHON-INSPIRED LANGUAGE IMPLEMENTED IN RUST.'
+    description: 'A Python-inspired language implemented in Rust.'
   }
 ];
 
@@ -51,13 +59,29 @@ let githubLastChecked = null;
 
 const translations = {
   en: {
-    'page.title': 'Vladislav Moroz — Portfolio',
+    'boot.skip': '[ SKIP INTRO ]',
+    'effects.on': '[ EFFECTS: ON ]',
+    'effects.off': '[ EFFECTS: OFF ]',
+    'effects.label': 'Visual effects',
+    'projects.intro': 'Selected projects and open-source contributions. Open a card to learn about the task and implementation.',
+    'projects.catalog': 'GitHub repository catalog',
+    'projects.selection': 'HAND-PICKED / 04',
+    'projects.details': '[ PROJECT DETAILS + ]',
+    'project.close': '[ CLOSE × ]',
+    'project.task': 'The task',
+    'project.work': 'My contribution',
+    'project.implementation': 'How it works',
+    'project.source': '[ CODE / PR ↗ ]',
+    'project.catalogNote': 'This repository is part of my GitHub catalog. The README contains its documentation and implementation details.',
+
+    'page.title': 'Vladislav Moroz (VLM326) — Rust Portfolio',
     'boot.aria': 'System boot sequence', 'boot.loading': 'LOADING...', 'boot.complete': 'SIGNAL LOCKED // SYSTEM READY',
     'topbar.site': 'PERSONAL SITE', 'topbar.online': 'ONLINE', 'topbar.legacy': 'LEGACY VERSION',
     'topbar.legacyFooter': 'LEGACY VERSION ↗', 'topbar.brand': 'Vlm326 portfolio',
     'language.toggleLabel': 'Switch to Russian',
-    'hero.eyebrow': '[ ABOUT / USER 326 ]', 'hero.role': 'SOFTWARE ENGINEERING STUDENT <span>/</span> RUST <span>/</span> SYSTEMS',
-    'hero.copy': 'SOFTWARE ENGINEERING STUDENT AT SPBU. INTERESTED IN RUST, SYSTEMS PROGRAMMING, AND LOW-LEVEL SOFTWARE.',
+    'hero.eyebrow': '[ ABOUT / USER 326 ]', 'hero.name': 'Vladislav Moroz — VLM326',
+    'hero.role': 'SOFTWARE ENGINEERING STUDENT <span>/</span> RUST <span>/</span> SYSTEMS',
+    'hero.copy': 'I study software engineering at SPbU and write Rust. My interests include algorithms, data deduplication, hashing, and efficient data structures.',
     'hero.projects': '[ VIEW PROJECTS ]', 'hero.github': '[ GITHUB ↗ ]', 'hero.cv': '[ CV ▾ ]',
     'hero.cvRussian': 'RUSSIAN CV ↗', 'hero.cvEnglish': 'ENGLISH CV ↗',
     'stats.aria': 'GitHub statistics', 'stats.title': 'GITHUB', 'stats.connection': 'CONNECTION',
@@ -71,27 +95,27 @@ const translations = {
     'monitor.title': '[02] ACTIVITY', 'monitor.githubActivity': 'GITHUB ACTIVITY', 'monitor.lastCommit': 'LAST PUSH',
     'monitor.contributions': 'CONTRIBUTIONS', 'monitor.uptime': 'UPTIME', 'monitor.remote': 'REMOTE: github.com/Vlm326',
     'about.title': '[03] ABOUT.TXT',
-    'about.copy': 'I AM VLADISLAV MOROZ, A SOFTWARE ENGINEERING STUDENT AT SPBU. I BUILD SOFTWARE IN RUST AND CONTRIBUTE TO TEAM AND OPEN-SOURCE PROJECTS.',
-    'about.exploring': 'AREAS OF INTEREST:', 'about.topic1': 'SYSTEMS & LOW-LEVEL PROGRAMMING', 'about.topic2': 'COMPILERS & STATIC ANALYSIS',
-    'projects.title': '[04] PROJECTS', 'projects.repositories': 'REPOSITORIES', 'projects.found': 'FOUND',
+    'about.copy': 'I am Vladislav Moroz, a software engineering student at SPbU. I build Rust tools and contribute to open source. I enjoy understanding how algorithms work and putting them into practice.',
+    'about.exploring': 'Currently exploring:', 'about.topic1': 'Operating systems, memory management, and system programming', 'about.topic2': 'Data deduplication, hash functions, and similarity search',
+    'projects.title': '[04] SELECTED PROJECTS', 'projects.repositories': 'REPOSITORIES', 'projects.found': 'FOUND',
     'projects.sorting': 'Project sorting',
     'projects.sortStars': '[★ STARS]', 'projects.sortUpdated': '[↻ UPDATED]', 'projects.openRepo': '[ OPEN REPO ↗ ]',
-    'projects.descriptionFallback': 'PUBLIC REPOSITORY / SOURCE AVAILABLE ON GITHUB.',
-    'projects.localScript': 'RUST SANDBOX SERVICE AND LUA SCRIPT VALIDATION / EXECUTION PIPELINE.',
-    'projects.netAnalysis': 'GRAPH ANALYSIS TOOLKIT WITH BFS, STRONGLY CONNECTED COMPONENTS, AND LANDMARK INDEXING.',
-    'projects.rusthon': 'PYTHON-INSPIRED LANGUAGE IMPLEMENTED IN RUST, WITH A LEXER, PARSER, AST, AND INTERPRETER.',
+    'projects.descriptionFallback': 'A public repository. Source code and documentation are available on GitHub.',
+    'projects.localScript': 'A team project for checking and running Lua scripts in a Rust sandbox service.',
+    'projects.netAnalysis': 'Graph analysis in Rust: breadth-first search, strongly connected components, and landmark indexing.',
+    'projects.rusthon': 'A Python-inspired language built in Rust, from a lexer and parser to an AST interpreter.',
     'activity.title': '[05] ACTIVITY LOG', 'activity.feed': 'GITHUB FEED',
     'activity.waiting': 'WAITING FOR PUBLIC EVENTS...', 'activity.empty': 'NO PUBLIC EVENTS AVAILABLE.',
     'host.title': '[06] HOST SYSTEM', 'host.os': 'OS', 'host.kernel': 'KERNEL', 'host.hostname': 'HOSTNAME',
     'host.memory': 'MEMORY', 'host.swap': 'SWAP', 'host.info': 'HOST INFO', 'host.memoryUsage': 'Memory usage',
-    'experience.title': '[07] SELECTED WORK', 'experience.selected': 'SELECTED PROJECTS', 'experience.contributor': '[ CONTRIBUTOR ]',
-    'experience.marline': 'CONTRIBUTED AN IN-MEMORY POSTING-LIST INDEX AND JACCARD SIMILARITY OPERATIONS; THE PR WAS ACCEPTED UPSTREAM.',
+    'experience.title': '[07] MORE WORK & OPEN SOURCE', 'experience.selected': 'SELECTED PROJECTS', 'experience.contributor': '[ CONTRIBUTOR ]',
+    'experience.marline': 'Contributed an in-memory posting-list index and Jaccard similarity operations to this Rust deduplication project. The PR was accepted upstream.',
     'experience.merged': '[ MERGED PR ]',
-    'experience.rustAnalyzer': 'ADDED E0121 DIAGNOSTICS FOR TYPE-INFERENCE PLACEHOLDERS IN UNSUPPORTED CONTEXTS, WITH TESTS.',
+    'experience.rustAnalyzer': 'Added E0121 diagnostics for type-inference placeholders in unsupported contexts, together with tests.',
     'experience.prDetails': '[ PR / DETAILS ↗ ]', 'experience.personalProject': '[ PERSONAL PROJECT ]',
-    'experience.corrode': 'A RUST TOOL THAT COLLECTS GITHUB PR CONTEXT, RUNS LLM-ASSISTED REVIEWS, AND STORES REVIEW STATE IN SQLITE.',
+    'experience.corrode': 'A Rust tool that gathers GitHub PR context, runs LLM-assisted reviews, and stores review state in SQLite.',
     'experience.teamProject': '[ TEAM PROJECT ]',
-    'experience.localScript': 'BUILT PART OF A RUST SANDBOX SERVICE AND THE PIPELINE FOR LUA SYNTAX / SAFETY CHECKS AND EXECUTION.',
+    'experience.localScript': 'Worked on the Rust sandbox service and the pipeline for checking and executing Lua scripts.',
     'experience.openRepo': '[ OPEN REPO ↗ ]',
     'contact.title': '[08] CONTACT', 'contact.response': 'TYPICAL RESPONSE: ~24H', 'contact.telegram': 'TELEGRAM',
     'contact.open': '[ OPEN ↗ ]', 'contact.email': 'EMAIL // DIRECT', 'contact.writeMail': '[ WRITE EMAIL ↗ ]',
@@ -117,30 +141,46 @@ const translations = {
       '  date         print local date and time', '  uptime       print session uptime', '  social       show social links',
       '  repo NAME    open a repository', '  theme        cycle display theme', '  exit         close session (visual only)'
     ],
-    'command.about': ['HI, I AM VLADISLAV MOROZ', 'SOFTWARE ENGINEERING STUDENT AT SPBU', 'INTERESTED IN RUST AND SYSTEMS PROGRAMMING'],
+    'command.about': ["I am Vladislav Moroz.", "Software engineering student at SPbU.", "I write Rust and explore algorithms, deduplication, and hashing."],
     'command.projectsEmpty': ['NO REPOSITORIES AVAILABLE.'],
-    'command.research': ['AREAS OF INTEREST:', '  SYSTEMS & LOW-LEVEL PROGRAMMING', '  COMPILERS & STATIC ANALYSIS', '  DATA DEDUPLICATION'],
+    'command.research': ["Currently exploring:", "  Operating systems, memory management, and system programming", "  Data deduplication and hash functions", "  Similarity search and indexing"],
     'command.achievements': ['MARLINE :: POSTING-LIST INDEX / UPSTREAM PR ACCEPTED', 'RUST-ANALYZER :: E0121 DIAGNOSTIC / PR MERGED', 'CORRODE :: RUST + SQLITE + GITHUB API'],
     'command.skills': ['PROGRAMMING  Rust, C', 'SYSTEMS      Linux, Bash, Docker', 'RUST TOOLS   Cargo, Tokio, async programming', 'DATA         PostgreSQL, Git'],
     'command.github': ['OPENING HTTPS://GITHUB.COM/VLM326'],
     'command.contact': ['EMAIL:    morozvv75@gmail.com', 'TELEGRAM: @VLM326', 'GITHUB:   github.com/VLM326'],
     'command.whoami': ['vlm326'], 'command.pwd': ['/home/vlm326/portfolio'],
     'command.ls': ['about.txt  projects/  research/  achievements.log  skills.txt  contact.txt'],
-    'command.cat': ['VLADISLAV MOROZ — SOFTWARE ENGINEERING STUDENT AT SPBU.', 'INTERESTED IN RUST, SYSTEMS PROGRAMMING, AND OPEN SOURCE.'],
+    'command.cat': ["Vladislav Moroz — software engineering student at SPbU.", "Rust, algorithms, deduplication, hashing, and open source."],
     'command.neofetch': ['        .--.       VLM326@portfolio', '       |o_o |      -----------------', '       |:_/ |      OS: {os}', '      //   \\\\     KERNEL: {kernel}', '     (|     | )    HOST: {hostname}', '     /\\_   _/\\     SHELL: zsh', '     \\___)=(___/    MEM: {mem}   UPTIME: {uptime}'],
     'command.historyEmpty': ['NO COMMANDS IN HISTORY.'], 'command.repoMissing': 'REPOSITORY NOT FOUND: {name}',
     'command.unknown': 'COMMAND NOT FOUND: {name}', 'command.unknownHint': "TYPE 'HELP' FOR AVAILABLE COMMANDS.",
-    'command.theme': ['DISPLAY: {theme} PHOSPHOR', 'SCANLINES: ENABLED', 'REFRESH: 60HZ', 'PROFILE: VT100 / CRT'],
+    'command.theme': ['DISPLAY: {theme} PHOSPHOR', 'Motion and scanlines: use the effects toggle.', 'REFRESH: 60HZ', 'PROFILE: VT100 / CRT'],
     'command.exit': ['SESSION CANNOT BE CLOSED FROM REMOTE TTY.', 'TYPE `help` TO CONTINUE.']
   },
   ru: {
-    'page.title': 'Владислав Мороз — Портфолио',
+    'boot.skip': '[ ПРОПУСТИТЬ ]',
+    'effects.on': '[ ЭФФЕКТЫ: ВКЛ. ]',
+    'effects.off': '[ ЭФФЕКТЫ: ВЫКЛ. ]',
+    'effects.label': 'Визуальные эффекты',
+    'projects.intro': 'Избранные проекты и вклад в open source. Нажми на карточку, чтобы узнать о задаче и реализации.',
+    'projects.catalog': 'Каталог репозиториев GitHub',
+    'projects.selection': 'ВЫБРАНО ВРУЧНУЮ / 04',
+    'projects.details': '[ О ПРОЕКТЕ + ]',
+    'project.close': '[ ЗАКРЫТЬ × ]',
+    'project.task': 'Задача',
+    'project.work': 'Мой вклад',
+    'project.implementation': 'Как устроено',
+    'project.source': '[ КОД / PR ↗ ]',
+    'project.catalogNote': 'Этот репозиторий входит в мой GitHub-каталог. Документация и детали реализации находятся в README.',
+
+    'page.title': 'Владислав Мороз (VLM326) — Портфолио на Rust',
     'boot.aria': 'Загрузка системы', 'boot.loading': 'ЗАГРУЗКА...', 'boot.complete': 'СИГНАЛ ЕСТЬ // СИСТЕМА ГОТОВА',
     'topbar.site': 'ЛИЧНЫЙ САЙТ', 'topbar.online': 'В СЕТИ', 'topbar.legacy': 'СТАРАЯ ВЕРСИЯ',
     'topbar.legacyFooter': 'СТАРАЯ ВЕРСИЯ ↗', 'topbar.brand': 'Портфолио Vlm326',
     'language.toggleLabel': 'Переключить на английский',
-    'hero.eyebrow': '[ ОБО МНЕ / ПОЛЬЗОВАТЕЛЬ 326 ]', 'hero.role': 'СТУДЕНТ ПРОГРАММНОЙ ИНЖЕНЕРИИ <span>/</span> RUST <span>/</span> СИСТЕМЫ',
-    'hero.copy': 'ИЗУЧАЮ ПРОГРАММНУЮ ИНЖЕНЕРИЮ В СПбГУ. ИНТЕРЕСУЮСЬ RUST, СИСТЕМНЫМ И НИЗКОУРОВНЕВЫМ ПРОГРАММИРОВАНИЕМ.',
+    'hero.eyebrow': '[ ОБО МНЕ / ПОЛЬЗОВАТЕЛЬ 326 ]', 'hero.name': 'Владислав Мороз — VLM326',
+    'hero.role': 'СТУДЕНТ ПРОГРАММНОЙ ИНЖЕНЕРИИ <span>/</span> RUST <span>/</span> СИСТЕМЫ',
+    'hero.copy': 'Учусь на программной инженерии в СПбГУ и пишу на Rust. Интересуюсь алгоритмами, дедупликацией данных, хешированием и эффективными структурами данных.',
     'hero.projects': '[ СМОТРЕТЬ ПРОЕКТЫ ]', 'hero.github': '[ GITHUB ↗ ]', 'hero.cv': '[ РЕЗЮМЕ ▾ ]',
     'hero.cvRussian': 'РЕЗЮМЕ НА РУССКОМ ↗', 'hero.cvEnglish': 'РЕЗЮМЕ НА АНГЛИЙСКОМ ↗',
     'stats.aria': 'Статистика GitHub', 'stats.title': 'GITHUB', 'stats.connection': 'СОЕДИНЕНИЕ',
@@ -154,27 +194,27 @@ const translations = {
     'monitor.title': '[02] АКТИВНОСТЬ', 'monitor.githubActivity': 'АКТИВНОСТЬ GITHUB', 'monitor.lastCommit': 'ПОСЛЕДНИЙ PUSH',
     'monitor.contributions': 'СОБЫТИЯ', 'monitor.uptime': 'ВРЕМЯ РАБОТЫ', 'monitor.remote': 'УДАЛЁННЫЙ УЗЕЛ: github.com/Vlm326',
     'about.title': '[03] ОБО МНЕ.TXT',
-    'about.copy': 'Я ВЛАДИСЛАВ МОРОЗ, СТУДЕНТ ПРОГРАММНОЙ ИНЖЕНЕРИИ СПбГУ. ПИШУ НА RUST И УЧАСТВУЮ В КОМАНДНЫХ И OPEN-SOURCE ПРОЕКТАХ.',
-    'about.exploring': 'ОБЛАСТИ ИНТЕРЕСОВ:', 'about.topic1': 'СИСТЕМНОЕ И НИЗКОУРОВНЕВОЕ ПРОГРАММИРОВАНИЕ', 'about.topic2': 'КОМПИЛЯТОРЫ И СТАТИЧЕСКИЙ АНАЛИЗ',
-    'projects.title': '[04] ПРОЕКТЫ', 'projects.repositories': 'РЕПОЗИТОРИИ', 'projects.found': 'НАЙДЕНО',
+    'about.copy': 'Я Владислав Мороз, студент программной инженерии СПбГУ. Разрабатываю инструменты на Rust и участвую в open source. Мне интересно разбираться в устройстве алгоритмов и применять их на практике.',
+    'about.exploring': 'Сейчас изучаю:', 'about.topic1': 'Операционные системы, управление памятью и системное программирование', 'about.topic2': 'Дедупликацию данных, хеш-функции и поиск похожих объектов',
+    'projects.title': '[04] ИЗБРАННЫЕ ПРОЕКТЫ', 'projects.repositories': 'РЕПОЗИТОРИИ', 'projects.found': 'НАЙДЕНО',
     'projects.sorting': 'Сортировка проектов',
     'projects.sortStars': '[★ ЗВЁЗДЫ]', 'projects.sortUpdated': '[↻ ОБНОВЛЕНИЕ]', 'projects.openRepo': '[ ОТКРЫТЬ РЕПОЗИТОРИЙ ↗ ]',
-    'projects.descriptionFallback': 'ПУБЛИЧНЫЙ РЕПОЗИТОРИЙ / ИСХОДНЫЙ КОД НА GITHUB.',
-    'projects.localScript': 'RUST-СЕРВИС С ПЕСОЧНИЦЕЙ И ПРОВЕРКОЙ / ВЫПОЛНЕНИЕМ LUA-СКРИПТОВ.',
-    'projects.netAnalysis': 'ИНСТРУМЕНТЫ АНАЛИЗА ГРАФОВ: BFS, СИЛЬНО СВЯЗНЫЕ КОМПОНЕНТЫ И ИНДЕКСАЦИЯ ПО ОРИЕНТИРАМ.',
-    'projects.rusthon': 'ЯЗЫК В ДУХЕ PYTHON НА RUST: ЛЕКСЕР, ПАРСЕР, AST И ИНТЕРПРЕТАТОР.',
+    'projects.descriptionFallback': 'Публичный репозиторий. Исходный код и документация доступны на GitHub.',
+    'projects.localScript': 'Командный проект для проверки и выполнения Lua-скриптов в сервисе-песочнице на Rust.',
+    'projects.netAnalysis': 'Анализ графов на Rust: поиск в ширину, сильно связные компоненты и индексация по ориентирам.',
+    'projects.rusthon': 'Язык в духе Python, написанный на Rust: от лексера и парсера до интерпретатора AST.',
     'activity.title': '[05] ЛЕНТА АКТИВНОСТИ', 'activity.feed': 'ЛЕНТА GITHUB',
     'activity.waiting': 'ОЖИДАНИЕ ПУБЛИЧНЫХ СОБЫТИЙ...', 'activity.empty': 'НЕТ ПУБЛИЧНЫХ СОБЫТИЙ.',
     'host.title': '[06] СИСТЕМА СЕРВЕРА', 'host.os': 'ОС', 'host.kernel': 'ЯДРО', 'host.hostname': 'ИМЯ УЗЛА',
     'host.memory': 'ПАМЯТЬ', 'host.swap': 'SWAP', 'host.info': 'СВЕДЕНИЯ О СЕРВЕРЕ', 'host.memoryUsage': 'Использование памяти',
-    'experience.title': '[07] ИЗБРАННЫЕ ПРОЕКТЫ', 'experience.selected': 'ОСНОВНЫЕ РАБОТЫ', 'experience.contributor': '[ УЧАСТНИК ПРОЕКТА ]',
-    'experience.marline': 'РЕАЛИЗОВАЛ ИНДЕКС НА СПИСКАХ ПОЗИЦИЙ И ОПЕРАЦИИ СХОДСТВА ЖАККАРА; PR ПРИНЯТ В ОСНОВНОЙ ПРОЕКТ.',
+    'experience.title': '[07] ДРУГИЕ РАБОТЫ И OPEN SOURCE', 'experience.selected': 'ОСНОВНЫЕ РАБОТЫ', 'experience.contributor': '[ УЧАСТНИК ПРОЕКТА ]',
+    'experience.marline': 'Добавил индекс в памяти на основе posting lists и операции сходства Жаккара в Rust-проект по дедупликации. PR принят в основной проект.',
     'experience.merged': '[ PR ВМЕРЖЕН ]',
-    'experience.rustAnalyzer': 'ДОБАВИЛ ДИАГНОСТИКУ E0121 ДЛЯ НЕДОПУСТИМЫХ КОНТЕКСТОВ ВЫВОДА ТИПОВ И ТЕСТЫ.',
+    'experience.rustAnalyzer': 'Добавил диагностику E0121 для плейсхолдеров вывода типов в недопустимых контекстах и тесты для неё.',
     'experience.prDetails': '[ PR / ПОДРОБНОСТИ ↗ ]', 'experience.personalProject': '[ ЛИЧНЫЙ ПРОЕКТ ]',
-    'experience.corrode': 'ИНСТРУМЕНТ НА RUST: СОБИРАЕТ КОНТЕКСТ GITHUB PR, ЗАПУСКАЕТ РЕВЬЮ С ПОМОЩЬЮ LLM И ХРАНИТ СОСТОЯНИЕ В SQLITE.',
+    'experience.corrode': 'Инструмент на Rust: собирает контекст GitHub PR, запускает ревью с помощью LLM и хранит состояние в SQLite.',
     'experience.teamProject': '[ КОМАНДНЫЙ ПРОЕКТ ]',
-    'experience.localScript': 'РАЗРАБАТЫВАЛ RUST-СЕРВИС-ПЕСОЧНИЦУ И PIPELINE ПРОВЕРКИ БЕЗОПАСНОСТИ И ВЫПОЛНЕНИЯ LUA-КОДА.',
+    'experience.localScript': 'Работал над сервисом-песочницей на Rust и конвейером проверки и выполнения Lua-скриптов.',
     'experience.openRepo': '[ ОТКРЫТЬ РЕПОЗИТОРИЙ ↗ ]',
     'contact.title': '[08] КОНТАКТЫ', 'contact.response': 'ОБЫЧНО ОТВЕЧАЮ: ~24 Ч', 'contact.telegram': 'TELEGRAM',
     'contact.open': '[ ОТКРЫТЬ ↗ ]', 'contact.email': 'EMAIL // НАПРЯМУЮ', 'contact.writeMail': '[ НАПИСАТЬ ↗ ]',
@@ -200,23 +240,132 @@ const translations = {
       '  date         дата и время', '  uptime       время с начала сессии', '  social       ссылки на профили',
       '  repo NAME    открыть репозиторий', '  theme        сменить цветовую тему', '  exit         завершить сессию (только визуально)'
     ],
-    'command.about': ['ПРИВЕТ, Я ВЛАДИСЛАВ МОРОЗ', 'СТУДЕНТ ПРОГРАММНОЙ ИНЖЕНЕРИИ СПбГУ', 'ИНТЕРЕСУЮСЬ RUST И СИСТЕМНЫМ ПРОГРАММИРОВАНИЕМ'],
+    'command.about': ["Я Владислав Мороз.", "Студент программной инженерии СПбГУ.", "Пишу на Rust, изучаю алгоритмы, дедупликацию и хеширование."],
     'command.projectsEmpty': ['НЕТ ДОСТУПНЫХ РЕПОЗИТОРИЕВ.'],
-    'command.research': ['ОБЛАСТИ ИНТЕРЕСОВ:', '  СИСТЕМНОЕ И НИЗКОУРОВНЕВОЕ ПРОГРАММИРОВАНИЕ', '  КОМПИЛЯТОРЫ И СТАТИЧЕСКИЙ АНАЛИЗ', '  ДЕДУПЛИКАЦИЯ ДАННЫХ'],
+    'command.research': ["Сейчас изучаю:", "  Операционные системы, управление памятью и системное программирование", "  Дедупликацию данных и хеш-функции", "  Поиск похожих объектов и индексацию"],
     'command.achievements': ['MARLINE :: ИНДЕКС НА СПИСКАХ ПОЗИЦИЙ / PR ПРИНЯТ', 'RUST-ANALYZER :: ДИАГНОСТИКА E0121 / PR ВМЕРЖЕН', 'CORRODE :: RUST + SQLITE + GITHUB API'],
     'command.skills': ['ЯЗЫКИ       Rust, C', 'СИСТЕМЫ     Linux, Bash, Docker', 'ИНСТРУМЕНТЫ Cargo, Tokio, асинхронность', 'ДАННЫЕ      PostgreSQL, Git'],
     'command.github': ['ОТКРЫВАЮ HTTPS://GITHUB.COM/VLM326'],
     'command.contact': ['EMAIL:    morozvv75@gmail.com', 'TELEGRAM: @VLM326', 'GITHUB:   github.com/VLM326'],
     'command.whoami': ['vlm326'], 'command.pwd': ['/home/vlm326/portfolio'],
     'command.ls': ['about.txt  projects/  research/  achievements.log  skills.txt  contact.txt'],
-    'command.cat': ['ВЛАДИСЛАВ МОРОЗ — СТУДЕНТ ПРОГРАММНОЙ ИНЖЕНЕРИИ СПбГУ.', 'ИНТЕРЕСУЮСЬ RUST, СИСТЕМНЫМ ПРОГРАММИРОВАНИЕМ И OPEN SOURCE.'],
+    'command.cat': ["Владислав Мороз — студент программной инженерии СПбГУ.", "Rust, алгоритмы, дедупликация, хеширование и open source."],
     'command.neofetch': ['        .--.       VLM326@portfolio', '       |o_o |      -----------------', '       |:_/ |      ОС: {os}', '      //   \\\\     ЯДРО: {kernel}', '     (|     | )    УЗЕЛ: {hostname}', '     /\\_   _/\\     ОБОЛОЧКА: zsh', '     \\___)=(___/    ПАМЯТЬ: {mem}   ВРЕМЯ: {uptime}'],
     'command.historyEmpty': ['ИСТОРИЯ КОМАНД ПУСТА.'], 'command.repoMissing': 'РЕПОЗИТОРИЙ НЕ НАЙДЕН: {name}',
     'command.unknown': 'НЕИЗВЕСТНАЯ КОМАНДА: {name}', 'command.unknownHint': "ВВЕДИТЕ 'HELP', ЧТОБЫ УВИДЕТЬ СПИСОК КОМАНД.",
-    'command.theme': ['ЦВЕТ: {theme} PHOSPHOR', 'СТРОКИ РАЗВЁРТКИ: ВКЛ.', 'ЧАСТОТА: 60 ГЦ', 'ПРОФИЛЬ: VT100 / CRT'],
+    'command.theme': ['ЦВЕТ: {theme} PHOSPHOR', 'Анимации и развёртка: переключатель эффектов в шапке.', 'ЧАСТОТА: 60 ГЦ', 'ПРОФИЛЬ: VT100 / CRT'],
     'command.exit': ['СЕАНС НЕЛЬЗЯ ЗАВЕРШИТЬ ИЗ УДАЛЁННОГО TTY.', 'ВВЕДИТЕ `help`, ЧТОБЫ ПРОДОЛЖИТЬ.']
   }
 };
+
+const projectProfiles = [
+  {
+    "id": "localscript",
+    "name": "LocalScript",
+    "stack": "Rust · Lua · Sandbox",
+    "summary": "projects.localScript",
+    "url": "https://github.com/Vlm326/LocalScript",
+    "en": [
+      "Check Lua scripts before execution and run them through a sandbox service.",
+      "I worked on part of the Rust sandbox service and the Lua validation and execution pipeline.",
+      "The pipeline combines syntax and safety checks with script execution. This was a team project; my contribution focused on the service and script-processing pipeline."
+    ],
+    "ru": [
+      "Проверять Lua-скрипты перед запуском и выполнять их через сервис-песочницу.",
+      "Я работал над частью сервиса на Rust и конвейером проверки и выполнения Lua-кода.",
+      "Конвейер объединяет синтаксические проверки, проверки безопасности и выполнение скриптов. Это командный проект; мой вклад связан с сервисом и обработкой скриптов."
+    ]
+  },
+  {
+    "id": "netanalysys",
+    "name": "NetAnalysys",
+    "stack": "Rust · Graphs · Algorithms",
+    "summary": "projects.netAnalysis",
+    "url": "https://github.com/Vlm326/NetAnalysys",
+    "en": [
+      "Explore graph structure and connectivity using graph algorithms.",
+      "The project brings together graph analysis tools implemented in Rust.",
+      "Breadth-first search traverses a graph, strongly connected components describe mutual reachability, and landmark indexing provides an additional way to organize graph queries."
+    ],
+    "ru": [
+      "Исследовать структуру графов и связи между вершинами с помощью графовых алгоритмов.",
+      "В проекте собраны инструменты анализа графов, реализованные на Rust.",
+      "Поиск в ширину используется для обхода графа, сильно связные компоненты описывают взаимную достижимость, а индексация по ориентирам дополняет инструменты работы с графом."
+    ]
+  },
+  {
+    "id": "rusthon",
+    "name": "Rusthon",
+    "stack": "Rust · Lexer · Parser · AST",
+    "summary": "projects.rusthon",
+    "url": "https://github.com/Vlm326/Rusthon",
+    "en": [
+      "Explore how a Python-inspired programming language can be implemented in Rust.",
+      "The project implements the language-processing pipeline: lexer, parser, AST, and interpreter.",
+      "Source text is split into tokens, parsed into an abstract syntax tree, and then evaluated by the interpreter. Each stage has a separate responsibility."
+    ],
+    "ru": [
+      "Разобраться, как реализовать на Rust язык программирования в духе Python.",
+      "В проекте реализованы этапы обработки языка: лексер, парсер, AST и интерпретатор.",
+      "Исходный текст разбивается на токены, затем преобразуется в абстрактное синтаксическое дерево. Интерпретатор выполняет полученное дерево; у каждого этапа своя задача."
+    ]
+  },
+  {
+    "id": "marline",
+    "name": "Marline",
+    "stack": "Rust · Deduplication · Jaccard",
+    "summary": "experience.marline",
+    "url": "https://github.com/admitrievtsev/marline/pull/2",
+    "en": [
+      "Support data deduplication and comparison of similar objects.",
+      "I contributed an in-memory posting-list index and Jaccard similarity operations. The PR was accepted upstream.",
+      "Posting lists associate indexed elements with the objects containing them. Jaccard similarity compares sets using the size of their intersection relative to their union."
+    ],
+    "ru": [
+      "Поддержать дедупликацию данных и сравнение похожих объектов.",
+      "Добавил индекс в памяти на основе posting lists и операции сходства Жаккара. PR принят в основной проект.",
+      "Posting lists связывают индексируемые элементы с объектами, в которых они встречаются. Сходство Жаккара сравнивает множества по отношению размера пересечения к размеру объединения."
+    ]
+  },
+  {
+    "id": "rust-analyzer",
+    "name": "rust-analyzer",
+    "stack": "Rust · Diagnostics · Tests",
+    "summary": "experience.rustAnalyzer",
+    "url": "https://github.com/rust-lang/rust-analyzer/pull/22469",
+    "en": [
+      "Report type-inference placeholders used in unsupported contexts.",
+      "I added E0121 diagnostics and tests. The PR was merged into rust-analyzer.",
+      "The change detects unsupported uses of type-inference placeholders and reports a diagnostic. Tests cover the diagnostic behavior."
+    ],
+    "ru": [
+      "Сообщать о плейсхолдерах вывода типов, использованных в недопустимых контекстах.",
+      "Добавил диагностику E0121 и тесты. PR вмержен в rust-analyzer.",
+      "Изменение обнаруживает неподдерживаемое использование плейсхолдеров вывода типов и выдаёт диагностику. Поведение проверки покрыто тестами."
+    ]
+  },
+  {
+    "id": "corrode",
+    "name": "Corrode",
+    "stack": "Rust · SQLite · GitHub API",
+    "summary": "experience.corrode",
+    "url": "https://github.com/Vlm326/Corrode",
+    "en": [
+      "Gather pull request context and support LLM-assisted code review.",
+      "A personal Rust project combining GitHub PR context, LLM-assisted review, and persistent review state.",
+      "The tool collects context from GitHub, runs a review with an LLM, and stores review state in SQLite."
+    ],
+    "ru": [
+      "Собирать контекст pull request и помогать проводить ревью кода с помощью LLM.",
+      "Личный проект на Rust, объединяющий контекст GitHub PR, ревью с LLM и сохранение состояния проверки.",
+      "Инструмент получает контекст из GitHub, запускает ревью с помощью LLM и сохраняет состояние в SQLite."
+    ]
+  }
+];
+const featuredProjects = ['localscript', 'rusthon', 'marline', 'corrode']
+  .map((id) => projectProfiles.find((project) => project.id === id));
+let activeProjectId = null;
+let projectOpener = null;
 
 function t(key, values = {}) {
   const text = translations[currentLanguage]?.[key] ?? translations.en[key] ?? key;
@@ -241,7 +390,7 @@ function applyLanguage(language, persist = true) {
   const toggle = $('#languageToggle');
   toggle.textContent = currentLanguage === 'ru' ? 'EN' : 'RU';
   toggle.setAttribute('aria-label', t('language.toggleLabel'));
-  if (persist) localStorage.setItem('vlm326-language', currentLanguage);
+  if (persist) preferences.setItem('vlm326-language', currentLanguage);
 
   if (github.user) renderGithub();
   else renderProjects();
@@ -256,6 +405,8 @@ function applyLanguage(language, persist = true) {
     renderActivity();
   }
   updateGithubStatus();
+  updateEffectsButton();
+  if (activeProjectId) renderProjectDialog();
 }
 
 function updateGithubStatus() {
@@ -349,12 +500,12 @@ function applyTheme(name) {
   document.documentElement.classList.remove('theme-amber', 'theme-white');
   if (theme === 'amber') document.documentElement.classList.add('theme-amber');
   if (theme === 'white') document.documentElement.classList.add('theme-white');
-  localStorage.setItem('vlm326-theme', theme);
+  preferences.setItem('vlm326-theme', theme);
   return theme;
 }
 
 function currentTheme() {
-  const saved = localStorage.getItem('vlm326-theme');
+  const saved = preferences.getItem('vlm326-theme');
   return themes.includes(saved) ? saved : 'green';
 }
 
@@ -514,6 +665,7 @@ document.querySelectorAll('.sort-button').forEach((button) => {
     activeSort = button.dataset.sort;
     document.querySelectorAll('.sort-button').forEach((item) => {
       item.classList.toggle('is-active', item === button);
+      item.setAttribute('aria-pressed', String(item === button));
     });
     renderProjects();
   });
@@ -577,8 +729,8 @@ updateClocks();
 async function fetchGithub() {
   // Try cached data first (15 min TTL)
   try {
-    const stored = JSON.parse(localStorage.getItem(cacheKey) || 'null');
-    if (stored && Date.now() - stored.timestamp < 15 * 60 * 1000) {
+    const stored = JSON.parse(preferences.getItem(cacheKey) || 'null');
+    if (stored?.data?.user && Array.isArray(stored.data.repos) && Date.now() - stored.timestamp < 15 * 60 * 1000) {
       github = stored.data;
       githubLastChecked = stored.timestamp;
       githubStatus = 'cachedLive';
@@ -597,6 +749,7 @@ async function fetchGithub() {
       fetch('/api/repos').then((r) => r.ok ? r.json() : Promise.reject())
     ]);
 
+    if (!userResponse || !Array.isArray(reposResponse)) throw new Error('Invalid GitHub snapshot');
     github = {
       user: userResponse,
       repos: reposResponse.sort(
@@ -607,7 +760,7 @@ async function fetchGithub() {
     githubLastChecked = Date.now();
     githubStatus = 'cachedLive';
 
-    localStorage.setItem(cacheKey,
+    preferences.setItem(cacheKey,
       JSON.stringify({ timestamp: githubLastChecked, data: github })
     );
     renderGithub();
@@ -620,10 +773,11 @@ async function fetchGithub() {
   // Fallback: hit GitHub API directly
   try {
     const [user, repos] = await Promise.all([
-      fetch('https://api.github.com/users/Vlm326').then((r) => r.json()),
+      fetch('https://api.github.com/users/Vlm326').then((r) => r.ok ? r.json() : Promise.reject()),
       fetch('https://api.github.com/users/Vlm326/repos?sort=pushed')
-        .then((r) => r.json())
+        .then((r) => r.ok ? r.json() : Promise.reject())
     ]);
+    if (!user || !Array.isArray(repos)) throw new Error('Invalid GitHub response');
     github = { user, repos, events: [] };
     githubLastChecked = Date.now();
     githubStatus = 'cachedLive';
@@ -684,33 +838,74 @@ function renderGithub() {
   renderProjects();
 }
 
-function renderProjects() {
-  const grid = $('#projectGrid');
-  if (!github.repos.length) return;
-
-  const curatedDescriptions = {
-    localscript: 'projects.localScript',
-    netanalysys: 'projects.netAnalysis',
-    rusthon: 'projects.rusthon'
-  };
-
-  grid.innerHTML = sortRepos().slice(0, 6).map((repo) => `
-    <article class="project-card">
-      <div class="project-card__top">
-        <span>${escapeHtml(repo.name.toUpperCase())}</span>
-        <span class="live-value">${repo.stargazers_count || 0}★</span>
+function projectCard(project) {
+  return `
+    <article class="project-card project-card--interactive">
+      <div class="project-card__top"><h3>${escapeHtml(project.name)}</h3></div>
+      <p>${escapeHtml(project.description)}</p>
+      <div class="project-card__tags">${escapeHtml(project.stack)}</div>
+      <div class="project-card__actions">
+        <button type="button" class="project-details" data-project="${escapeHtml(project.id)}"
+          aria-haspopup="dialog" aria-label="${escapeHtml(t('projects.details') + ' ' + project.name)}">${escapeHtml(t('projects.details'))}</button>
+        <a href="${escapeHtml(project.url)}" target="_blank" rel="noreferrer">${escapeHtml(t('projects.openRepo'))}</a>
       </div>
-      <p>${escapeHtml(t(curatedDescriptions[repo.name.toLowerCase()] || '') || repo.description || t('projects.descriptionFallback'))}</p>
-      <div class="project-card__tags">
-        ${escapeHtml(repo.language || 'MISC')} ·
-        ${repo.stargazers_count || 0} ★
-      </div>
-      <a href="${escapeHtml(repo.html_url)}" target="_blank" rel="noreferrer">
-        ${escapeHtml(t('projects.openRepo'))}
-      </a>
-    </article>
-  `).join('');
+    </article>`;
 }
+
+function renderProjects() {
+  // Preserve the fixed selection regardless of GitHub availability or catalog sorting.
+  $('#projectGrid').innerHTML = featuredProjects.map((project) => projectCard({
+    ...project, description: t(project.summary)
+  })).join('');
+  $('#repoGrid').innerHTML = sortRepos().map((repo) => {
+    const profile = projectProfiles.find((project) => project.id === repo.name.toLowerCase());
+    return projectCard({
+      id: repo.name.toLowerCase(), name: repo.name,
+      description: profile ? t(profile.summary) : repo.description || t('projects.descriptionFallback'),
+      stack: `${repo.language || '—'} · ${repo.stargazers_count || 0} ★`,
+      url: repo.html_url
+    });
+  }).join('');
+  $('#projectCount').textContent = github.repos.length;
+}
+
+function renderProjectDialog() {
+  const profile = projectProfiles.find((project) => project.id === activeProjectId);
+  const repo = github.repos.find((item) => item.name.toLowerCase() === activeProjectId);
+  if (!profile && !repo) return;
+  $('#projectDialogTitle').textContent = profile?.name || repo.name;
+  $('#projectDialogStack').textContent = profile?.stack || repo.language || 'GitHub';
+  const sections = profile
+    ? [t('project.task'), t('project.work'), t('project.implementation')].map((title, index) =>
+      `<section><h3>${escapeHtml(title)}</h3><p>${escapeHtml(profile[currentLanguage][index])}</p></section>`).join('')
+    : `<p>${escapeHtml(repo.description || t('projects.descriptionFallback'))}</p><p>${escapeHtml(t('project.catalogNote'))}</p>`;
+  $('#projectDialogBody').innerHTML = sections;
+  $('#projectDialogSource').href = profile?.url || repo.html_url;
+}
+
+const projectDialog = $('#projectDialog');
+document.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-project]');
+  if (!button) return;
+  activeProjectId = button.dataset.project;
+  projectOpener = button;
+  renderProjectDialog();
+  projectDialog.showModal();
+});
+$('#projectDialogClose').addEventListener('click', () => projectDialog.close());
+projectDialog.addEventListener('click', (event) => {
+  const rect = projectDialog.getBoundingClientRect();
+  if (event.target === projectDialog &&
+    (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) {
+    projectDialog.close();
+  }
+});
+projectDialog.addEventListener('close', () => {
+  const replacement = [...document.querySelectorAll('[data-project]')]
+    .find((button) => button.dataset.project === activeProjectId);
+  (projectOpener?.isConnected ? projectOpener : replacement)?.focus();
+  activeProjectId = null;
+});
 
 function renderActivity() {
   if (!github.events?.length) {
@@ -789,7 +984,7 @@ async function fetchSystemInfo() {
 // ============================================================
 if (
   'IntersectionObserver' in window &&
-  !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  !document.documentElement.classList.contains('effects-off')
 ) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -811,7 +1006,7 @@ if (
 // ============================================================
 // INIT
 // ============================================================
-const savedLanguage = localStorage.getItem('vlm326-language');
+const savedLanguage = preferences.getItem('vlm326-language');
 applyLanguage(savedLanguage === 'ru' ? 'ru' : 'en', false);
 renderProjects();
 fetchGithub();
@@ -821,11 +1016,40 @@ setInterval(fetchEvents, 5 * 60 * 1000);
 applyTheme(currentTheme());
 
 // ============================================================
-// BOOT SEQUENCE
+// BOOT SEQUENCE & VISUAL PREFERENCES
 // ============================================================
-setTimeout(() => {
-  $('#bootLine').textContent = t('boot.complete');
-  setTimeout(() => {
-    $('#boot').classList.add('is-hidden');
-  }, 500);
-}, 2100);
+function updateEffectsButton() {
+  const enabled = !document.documentElement.classList.contains('effects-off');
+  $('#effectsToggle').textContent = t(enabled ? 'effects.on' : 'effects.off');
+  $('#effectsToggle').setAttribute('aria-pressed', String(enabled));
+}
+
+function finishBoot() {
+  const wasVisible = document.documentElement.classList.contains('boot-pending');
+  document.documentElement.classList.remove('boot-pending');
+  $('#top').inert = false;
+  preferences.setItem('vlm326-intro-seen', '1');
+  if (wasVisible && document.activeElement === $('#bootSkip')) $('#top').focus();
+}
+
+$('#effectsToggle').addEventListener('click', () => {
+  const disabled = document.documentElement.classList.toggle('effects-off');
+  preferences.setItem('vlm326-effects', disabled ? 'off' : 'on');
+  updateEffectsButton();
+  if (disabled) finishBoot();
+});
+window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (event) => {
+  if (event.matches) {
+    document.documentElement.classList.add('effects-off');
+    updateEffectsButton();
+    finishBoot();
+  }
+});
+$('#bootSkip').addEventListener('click', finishBoot);
+if (document.documentElement.classList.contains('boot-pending')) {
+  $('#top').inert = true;
+  $('#bootSkip').focus({ preventScroll: true });
+  preferences.setItem('vlm326-intro-seen', '1');
+  setTimeout(() => { $('#bootLine').textContent = t('boot.complete'); }, 1200);
+  setTimeout(finishBoot, 1500);
+}

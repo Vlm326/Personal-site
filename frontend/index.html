@@ -5,11 +5,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#020402">
-    <title>Vladislav Moroz — Portfolio</title>
+    <meta name="author" content="Vladislav Moroz">
+    <meta name="description"
+        content="Vladislav Moroz (VLM326) is a Software Engineering student at SPbU working on Rust, algorithms, hashing, and data deduplication. See Marline and rust-analyzer.">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <link rel="canonical" href="https://vlm326.ru/">
+    <title>Vladislav Moroz (VLM326) — Rust Portfolio</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Vlm326">
+    <meta property="og:title" content="Vladislav Moroz (VLM326) — Rust Portfolio">
+    <meta property="og:description"
+        content="Rust, algorithms, hashing, and data deduplication projects by Vladislav Moroz.">
+    <meta property="og:url" content="https://vlm326.ru/">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://vlm326.ru/me.jpg">
+    <meta property="og:image:secure_url" content="https://vlm326.ru/me.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="640">
+    <meta property="og:image:height" content="640">
+    <meta property="og:image:alt" content="Vladislav Moroz working on a laptop">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Vladislav Moroz (VLM326) — Rust Portfolio">
+    <meta name="twitter:description"
+        content="Rust, algorithms, hashing, and data deduplication projects by Vladislav Moroz.">
+    <meta name="twitter:image" content="https://vlm326.ru/me.jpg">
+    <meta name="twitter:image:alt" content="Vladislav Moroz working on a laptop">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Vladislav Moroz",
+            "alternateName": ["Владислав Мороз", "Мороз Владислав", "VLM326"],
+            "url": "https://vlm326.ru/",
+            "image": "https://vlm326.ru/me.jpg",
+            "description": "Software Engineering student at SPbU interested in Rust, algorithms, hashing, and data deduplication.",
+            "sameAs": ["https://github.com/Vlm326"],
+            "knowsAbout": [
+                "Rust",
+                "Algorithms",
+                "Data structures",
+                "Hash functions",
+                "Data deduplication"
+            ]
+        }
+    </script>
+    <noscript><style>#boot { display: none !important; }</style></noscript>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+    <script>
+        // Apply preferences before paint; unavailable storage is harmless.
+        (() => {
+            let effects = null;
+            let seen = false;
+            try {
+                effects = localStorage.getItem('vlm326-effects');
+                seen = localStorage.getItem('vlm326-intro-seen') === '1';
+            } catch {}
+            const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (effects === 'off' || reduced) document.documentElement.classList.add('effects-off');
+            if (!seen && effects !== 'off' && !reduced) document.documentElement.classList.add('boot-pending');
+            // A failed application script must never leave the introduction blocking the page.
+            setTimeout(() => {
+                document.documentElement.classList.remove('boot-pending');
+                document.getElementById('top')?.removeAttribute('inert');
+            }, 3000);
+        })();
+    </script>
     <link rel="stylesheet" href="terminal.css">
 </head>
 
@@ -18,9 +81,10 @@
         <div class="boot__logo">Vlm326</div>
         <div class="boot__line" id="bootLine" data-i18n="boot.loading">LOADING...</div>
         <div class="boot__bar"><span></span></div>
+        <button type="button" class="terminal-button boot__skip" id="bootSkip" data-i18n="boot.skip">[ SKIP INTRO ]</button>
     </div>
 
-    <main class="crt-shell" id="top">
+    <main class="crt-shell" id="top" tabindex="-1">
         <div class="crt-shell__glass" aria-hidden="true"></div>
         <div class="crt-shell__noise" aria-hidden="true"></div>
         <div class="screen">
@@ -34,6 +98,8 @@
                         class="clock-group"><b>SPB</b><span id="clock">00:00:00</span></span><span
                         class="clock-group hide-small"><b>UTC</b><span id="clockUtc">00:00:00</span></span><span
                         class="clock-group hide-small"><b>TYO</b><span id="clockTokyo">00:00:00</span></span>
+                    <button class="terminal-button effects-toggle" id="effectsToggle" type="button" aria-pressed="true"
+                        aria-label="Visual effects" data-i18n-aria-label="effects.label">[ EFFECTS: ON ]</button>
                     <button class="language-toggle" id="languageToggle" type="button" aria-label="Switch to Russian"
                         data-i18n-aria-label="language.toggleLabel">RU</button>
                     <a class="legacy-link" href="legacy/" data-i18n="topbar.legacy">LEGACY VERSION</a></div>
@@ -54,8 +120,9 @@
                                                                            
                                                                            
                                                                            </pre>
+                    <h1 class="hero__name" data-i18n="hero.name">Vladislav Moroz — VLM326</h1>
                     <p class="hero__role" data-i18n-html="hero.role">STUDENT <span>/</span> RUST <span>/</span> LINUX</p>
-                    <p class="hero__copy" data-i18n="hero.copy">I STUDY COMPUTER SCIENCE AT SPBU AND WRITE SMALL PROGRAMS IN RUST.</p>
+                    <p class="hero__copy" data-i18n="hero.copy">I study software engineering at SPbU and write Rust. My interests include algorithms, data deduplication, hashing, and efficient data structures.</p>
                     <div class="hero__actions">
                         <a href="#projects" class="terminal-button" data-i18n="hero.projects">[ VIEW PROJECTS ]</a>
                         <a href="https://github.com/Vlm326" target="_blank" rel="noreferrer" data-i18n="hero.github"
@@ -114,7 +181,7 @@
 
             <div class="dashboard-grid">
                 <section class="panel terminal-box" id="skills">
-                    <div class="panel-title" data-i18n="profile.title">[01] PROFILE</div>
+                    <h2 class="panel-title" data-i18n="profile.title">[01] PROFILE</h2>
                     <div class="key-value">
                         <p><span data-i18n="profile.hostname">HOSTNAME</span> <span class="key-value__value" data-i18n="profile.hostnameValue">portfolio</span></p>
                         <p><span data-i18n="profile.user">USER</span> VLM326</p>
@@ -130,7 +197,7 @@
                 </section>
 
                 <section class="panel monitor terminal-box" aria-label="Activity" data-i18n-aria-label="monitor.title">
-                    <div class="panel-title" data-i18n="monitor.title">[02] ACTIVITY</div>
+                    <h2 class="panel-title" data-i18n="monitor.title">[02] ACTIVITY</h2>
                     <div class="monitor-grid">
                         <div><span data-i18n="monitor.githubActivity">GITHUB ACTIVITY</span><b id="monitorActivity" data-i18n="status.syncing">SYNCING</b></div>
                         <div><span data-i18n="monitor.lastCommit">LAST COMMIT</span><b id="lastCommit">--</b></div>
@@ -144,60 +211,67 @@
                 </section>
 
                 <section class="panel terminal-box about-panel">
-                    <div class="panel-title" data-i18n="about.title">[03] ABOUT.TXT</div>
-                    <p data-i18n="about.copy">I AM VLADISLAV MOROZ, A STUDENT AT SPBU. I AM LEARNING RUST AND IMPROVING MY COMPUTER SCIENCE SKILLS.</p>
-                    <p class="dim" data-i18n="about.exploring">CURRENTLY EXPLORING:</p>
+                    <h2 class="panel-title" data-i18n="about.title">[03] ABOUT.TXT</h2>
+                    <p data-i18n="about.copy">I am Vladislav Moroz, a software engineering student at SPbU. I build Rust tools and contribute to open source. I enjoy understanding how algorithms work and putting them into practice.</p>
+                    <p class="dim" data-i18n="about.exploring">Currently exploring:</p>
                     <ul class="prompt-list">
-                        <li data-i18n="about.topic1">FILE SYSTEMS &amp; DEDUPLICATION</li>
-                        <li data-i18n="about.topic2">COMPILER CONSTRUCTION</li>
+                        <li data-i18n="about.topic1">Operating systems, memory management, and system programming</li>
+                        <li data-i18n="about.topic2">Data deduplication, hash functions, and similarity search</li>
                     </ul>
                 </section>
             </div>
 
             <section class="section-block terminal-box" id="projects">
-                <div class="section-heading"><span data-i18n="projects.title">[04] PROJECTS</span><span class="dim"><span data-i18n="projects.repositories">REPOSITORIES</span> // <span
-                            id="projectCount">--</span> <span data-i18n="projects.found">FOUND</span></span></div>
-                <div class="registry-controls" role="group" aria-label="Project sorting" data-i18n-aria-label="projects.sorting"><button
-                        class="sort-button is-active" data-sort="stars" data-i18n="projects.sortStars">[★ STARS]</button><button class="sort-button"
-                        data-sort="updated" data-i18n="projects.sortUpdated">[↻ UPDATED]</button></div>
+                <div class="section-heading"><h2 data-i18n="projects.title">[04] SELECTED PROJECTS</h2><span class="dim" data-i18n="projects.selection">HAND-PICKED / 04</span></div>
+                <p class="section-intro" data-i18n="projects.intro">Selected projects and open-source contributions. Open a card to learn about the task and implementation.</p>
                 <div class="project-grid" id="projectGrid">
                     <article class="project-card">
-                        <div class="project-card__top"><span>LOCAL_SCRIPT</span><span class="live-value">ACTIVE</span>
-                        </div>
-                        <p>SCRIPT EXECUTION WITH AST ANALYSIS AND SANDBOXING.</p>
-                        <div class="project-card__tags">RUST · PYTHON · LUA</div><a
-                            href="https://github.com/Vlm326/LocalScript" target="_blank" rel="noreferrer">[ OPEN REPO ↗
-                            ]</a>
+                        <div class="project-card__top"><h3>LocalScript</h3></div>
+                        <p data-i18n="projects.localScript">A team project for checking and running Lua scripts in a Rust sandbox service.</p>
+                        <div class="project-card__tags">Rust · Lua · Sandbox</div>
+                        <a href="https://github.com/Vlm326/LocalScript" target="_blank" rel="noreferrer" data-i18n="projects.openRepo">[ OPEN REPO ↗ ]</a>
                     </article>
                     <article class="project-card">
-                        <div class="project-card__top"><span>NETANALYSIS</span><span class="live-value">STABLE</span>
-                        </div>
-                        <p>GRAPH ANALYSIS WITH BFS, SCC, AND LANDMARK INDEXING.</p>
-                        <div class="project-card__tags">RUST · GRAPHS</div><a
-                            href="https://github.com/Vlm326/NetAnalysys" target="_blank" rel="noreferrer">[ OPEN REPO ↗
-                            ]</a>
+                        <div class="project-card__top"><h3>Rusthon</h3></div>
+                        <p data-i18n="projects.rusthon">A Python-inspired language built in Rust, from a lexer and parser to an AST interpreter.</p>
+                        <div class="project-card__tags">Rust · Lexer · Parser · AST</div>
+                        <a href="https://github.com/Vlm326/Rusthon" target="_blank" rel="noreferrer" data-i18n="projects.openRepo">[ OPEN REPO ↗ ]</a>
                     </article>
                     <article class="project-card">
-                        <div class="project-card__top"><span>RUSTHON</span><span class="live-value">BUILDING</span>
-                        </div>
-                        <p>PYTHON-INSPIRED LANGUAGE IMPLEMENTED IN RUST. LEXER, PARSER, AST, INTERPRETER.</p>
-                        <div class="project-card__tags">RUST · PARSER · AST</div><a
-                            href="https://github.com/Vlm326/Rusthon" target="_blank" rel="noreferrer">[ OPEN REPO ↗
-                            ]</a>
+                        <div class="project-card__top"><h3>Marline</h3></div>
+                        <p data-i18n="experience.marline">Contributed an in-memory posting-list index and Jaccard similarity operations to this Rust deduplication project. The PR was accepted upstream.</p>
+                        <div class="project-card__tags">Rust · Deduplication · Jaccard</div>
+                        <a href="https://github.com/admitrievtsev/marline/pull/2" target="_blank" rel="noreferrer" data-i18n="projects.openRepo">[ OPEN REPO ↗ ]</a>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-card__top"><h3>Corrode</h3></div>
+                        <p data-i18n="experience.corrode">A Rust tool that gathers GitHub PR context, runs LLM-assisted reviews, and stores review state in SQLite.</p>
+                        <div class="project-card__tags">Rust · SQLite · GitHub API</div>
+                        <a href="https://github.com/Vlm326/Corrode" target="_blank" rel="noreferrer" data-i18n="projects.openRepo">[ OPEN REPO ↗ ]</a>
                     </article>
                 </div>
+                <details class="repository-catalog">
+                    <summary data-i18n="projects.catalog">GitHub repository catalog</summary>
+                    <p class="dim catalog-count"><span data-i18n="projects.repositories">REPOSITORIES</span> // <span
+                            id="projectCount">--</span> <span data-i18n="projects.found">FOUND</span></p>
+                    <div class="registry-controls" role="group" aria-label="Project sorting" data-i18n-aria-label="projects.sorting">
+                        <button class="sort-button is-active" aria-pressed="true" data-sort="stars" data-i18n="projects.sortStars">[★ STARS]</button>
+                        <button class="sort-button" aria-pressed="false" data-sort="updated" data-i18n="projects.sortUpdated">[↻ UPDATED]</button>
+                    </div>
+                    <div class="project-grid" id="repoGrid"></div>
+                </details>
             </section>
 
             <div class="lower-grid">
                 <section class="section-block terminal-box" id="activity">
-                    <div class="section-heading"><span data-i18n="activity.title">[05] ACTIVITY LOG</span><span class="dim" data-i18n="activity.feed">GITHUB FEED</span>
+                    <div class="section-heading"><h2 data-i18n="activity.title">[05] ACTIVITY LOG</h2><span class="dim" data-i18n="activity.feed">GITHUB FEED</span>
                     </div>
                     <div class="activity" id="activityFeed">
                         <p data-i18n="activity.waiting">WAITING FOR PUBLIC EVENTS...</p>
                     </div>
                 </section>
                 <section class="section-block terminal-box" id="hostSystem">
-                    <div class="section-heading"><span data-i18n="host.title">[06] HOST SYSTEM</span><span class="dim" id="hostSync" data-i18n="status.linking">LINKING ...</span></div>
+                    <div class="section-heading"><h2 data-i18n="host.title">[06] HOST SYSTEM</h2><span class="dim" id="hostSync" data-i18n="status.linking">LINKING ...</span></div>
                     <div class="key-value">
                         <p><span data-i18n="host.os">OS</span><b id="hostOs">--</b></p>
                         <p><span data-i18n="host.kernel">KERNEL</span><b id="hostKernel">--</b></p>
@@ -209,38 +283,42 @@
                     <div class="subheading" data-i18n="host.info">HOST INFO</div>
                 </section>
                 <section class="section-block terminal-box achievements" id="achievements">
-                    <div class="section-heading"><span data-i18n="experience.title">[07] SELECTED WORK</span><span class="dim" data-i18n="experience.selected">SELECTED ITEMS</span>
+                    <div class="section-heading"><h2 data-i18n="experience.title">[07] MORE WORK &amp; OPEN SOURCE</h2><span class="dim" data-i18n="experience.selected">SELECTED ITEMS</span>
                     </div>
                     <div class="achievement-list">
                         <article>
-                            <div class="achievement-title"><span>MARLINE</span><span class="live-value" data-i18n="experience.contributor">[ CONTRIBUTOR ]</span>
+                            <div class="achievement-title"><h3>MARLINE</h3><span class="live-value" data-i18n="experience.contributor">[ CONTRIBUTOR ]</span>
                             </div>
-                            <p data-i18n="experience.marline">CONTRIBUTED AN IN-MEMORY POSTING-LIST INDEX AND JACCARD SIMILARITY OPERATIONS; THE PR WAS ACCEPTED UPSTREAM.</p>
+                            <p data-i18n="experience.marline">Contributed an in-memory posting-list index and Jaccard similarity operations to this Rust deduplication project. The PR was accepted upstream.</p>
                             <a href="https://github.com/admitrievtsev/marline/pull/2" target="_blank" rel="noreferrer" data-i18n="experience.prDetails">[ PR / DETAILS ↗ ]</a>
+                            <button type="button" class="project-details" data-project="marline" aria-haspopup="dialog" data-i18n="projects.details">[ PROJECT DETAILS + ]</button>
                         </article>
                         <article>
-                            <div class="achievement-title"><span>RUST-ANALYZER</span><span class="live-value" data-i18n="experience.merged">[ MERGED PR ]</span></div>
-                            <p data-i18n="experience.rustAnalyzer">ADDED E0121 DIAGNOSTICS FOR TYPE-INFERENCE PLACEHOLDERS IN UNSUPPORTED CONTEXTS, WITH TESTS.</p><a
+                            <div class="achievement-title"><h3>RUST-ANALYZER</h3><span class="live-value" data-i18n="experience.merged">[ MERGED PR ]</span></div>
+                            <p data-i18n="experience.rustAnalyzer">Added E0121 diagnostics for type-inference placeholders in unsupported contexts, together with tests.</p><a
                                 href="https://github.com/rust-lang/rust-analyzer/pull/22469"
                                 target="_blank" rel="noreferrer" data-i18n="experience.prDetails">[ PR / DETAILS ↗ ]</a>
+                            <button type="button" class="project-details" data-project="rust-analyzer" aria-haspopup="dialog" data-i18n="projects.details">[ PROJECT DETAILS + ]</button>
                         </article>
                         <article>
-                            <div class="achievement-title"><span>CORRODE</span><span class="live-value" data-i18n="experience.personalProject">[ PERSONAL PROJECT ]</span></div>
-                            <p data-i18n="experience.corrode">A RUST TOOL THAT COLLECTS GITHUB PR CONTEXT, RUNS LLM-ASSISTED REVIEWS, AND STORES REVIEW STATE IN SQLITE.</p><a
+                            <div class="achievement-title"><h3>CORRODE</h3><span class="live-value" data-i18n="experience.personalProject">[ PERSONAL PROJECT ]</span></div>
+                            <p data-i18n="experience.corrode">A Rust tool that gathers GitHub PR context, runs LLM-assisted reviews, and stores review state in SQLite.</p><a
                                 href="https://github.com/Vlm326/Corrode" target="_blank" rel="noreferrer" data-i18n="experience.openRepo">[ OPEN REPO ↗ ]</a>
+                            <button type="button" class="project-details" data-project="corrode" aria-haspopup="dialog" data-i18n="projects.details">[ PROJECT DETAILS + ]</button>
                         </article>
                         <article>
-                            <div class="achievement-title"><span>LOCALSCRIPT</span><span class="live-value" data-i18n="experience.teamProject">[ TEAM PROJECT ]</span></div>
-                            <p data-i18n="experience.localScript">BUILT PART OF A RUST SANDBOX SERVICE AND THE PIPELINE FOR LUA SYNTAX / SAFETY CHECKS AND EXECUTION.</p><a
+                            <div class="achievement-title"><h3>LOCALSCRIPT</h3><span class="live-value" data-i18n="experience.teamProject">[ TEAM PROJECT ]</span></div>
+                            <p data-i18n="experience.localScript">Worked on the Rust sandbox service and the pipeline for checking and executing Lua scripts.</p><a
                                 href="https://github.com/Vlm326/LocalScript" target="_blank"
                                 rel="noreferrer" data-i18n="experience.openRepo">[ OPEN REPO ↗ ]</a>
+                            <button type="button" class="project-details" data-project="localscript" aria-haspopup="dialog" data-i18n="projects.details">[ PROJECT DETAILS + ]</button>
                         </article>
                     </div>
                 </section>
             </div>
 
             <section class="section-block terminal-box" id="contact">
-                    <div class="section-heading"><span data-i18n="contact.title">[08] CONTACT</span><span class="dim" data-i18n="contact.response">RESPONSE TIME
+                    <div class="section-heading"><h2 data-i18n="contact.title">[08] CONTACT</h2><span class="dim" data-i18n="contact.response">RESPONSE TIME
                         ~24H</span></div>
                 <div class="contact-grid">
                     <a class="contact-card contact-card--primary" href="https://t.me/VLM326" target="_blank"
@@ -258,7 +336,7 @@
             </section>
 
             <section class="terminal-window terminal-box" id="terminal">
-                <div class="terminal-window__bar"><span data-i18n="terminal.title">[09] TERMINAL</span><span class="dim" data-i18n="terminal.helpHint">type 'help' for commands</span></div>
+                <div class="terminal-window__bar"><h2 data-i18n="terminal.title">[09] TERMINAL</h2><span class="dim" data-i18n="terminal.helpHint">type 'help' for commands</span></div>
                 <div class="terminal-output" id="terminalOutput" aria-live="polite">
                     <p data-i18n="terminal.welcome">VLM326 TERMINAL v1.0.26</p>
                     <p data-i18n="terminal.ready">TERMINAL READY.</p>
@@ -279,6 +357,17 @@
             </footer>
         </div>
     </main>
+    <dialog class="project-dialog" id="projectDialog" aria-labelledby="projectDialogTitle">
+        <div class="project-dialog__header">
+            <span class="eyebrow">PROJECT / README</span>
+            <button type="button" class="terminal-button" id="projectDialogClose" data-i18n="project.close" autofocus>[ CLOSE × ]</button>
+        </div>
+        <h2 id="projectDialogTitle"></h2>
+        <p class="project-card__tags" id="projectDialogStack"></p>
+        <div class="project-dialog__body" id="projectDialogBody"></div>
+        <a class="terminal-button" id="projectDialogSource" target="_blank" rel="noreferrer" data-i18n="project.source">[ CODE / PR ↗ ]</a>
+    </dialog>
+
     <script src="app.js"></script>
 </body>
 
